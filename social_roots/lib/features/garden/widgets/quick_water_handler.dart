@@ -15,10 +15,10 @@ class QuickWaterHandler {
   ) async {
     // Quick text is the default for swipe actions
     const type = InteractionType.quickText;
-    
+
     // Haptic feedback
     HapticService.lightImpact();
-    
+
     // Log the interaction
     final repository = ref.read(interactionRepositoryProvider);
     await repository.logInteraction(
@@ -26,9 +26,10 @@ class QuickWaterHandler {
       type: type,
       summary: 'Thinking of you',
     );
-    
-    // Show confirmation
-    ScaffoldMessenger.of(context).showSnackBar(
+
+    // Show confirmation - capture ScaffoldMessenger before async gap
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(
       SnackBar(
         content: Row(
           children: [

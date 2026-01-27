@@ -4,20 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/contact_service.dart';
 import '../providers/onboarding_provider.dart';
-import '../../../data/models/plant.dart';
 
 class PlantQuiz extends ConsumerWidget {
   const PlantQuiz({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(onboardingProvider);
     final contactIds = state.selectedContactIds.toList();
     final currentIndex = state.quizContactIndex;
-    
+
     // Only quiz first 3 contacts
     final quizCount = contactIds.length.clamp(0, 3);
-    
+
     if (currentIndex >= quizCount) {
       // Quiz complete, move to plant creation
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,7 +24,7 @@ class PlantQuiz extends ConsumerWidget {
       });
       return const Center(child: CircularProgressIndicator());
     }
-    
+
     return _QuizQuestion(
       contactId: contactIds[currentIndex],
       questionNumber: currentIndex + 1,
@@ -38,23 +37,23 @@ class _QuizQuestion extends ConsumerWidget {
   final String contactId;
   final int questionNumber;
   final int totalQuestions;
-  
+
   const _QuizQuestion({
     required this.contactId,
     required this.questionNumber,
     required this.totalQuestions,
   });
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contactService = ref.watch(contactServiceProvider);
-    
+
     return FutureBuilder<Contact?>(
       future: contactService.getContact(contactId),
       builder: (context, snapshot) {
         final contact = snapshot.data;
         final displayName = contact?.displayName ?? 'This Person';
-        
+
         return Container(
           color: Colors.white,
           child: SafeArea(
@@ -68,32 +67,32 @@ class _QuizQuestion extends ConsumerWidget {
                     backgroundColor: Colors.grey.shade200,
                     valueColor: const AlwaysStoppedAnimation(Colors.green),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   Text(
                     'Question $questionNumber of $totalQuestions',
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-                  
+
                   const Spacer(),
-                  
+
                   // Contact avatar
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: contact?.thumbnail != null 
+                    backgroundImage: contact?.thumbnail != null
                         ? MemoryImage(contact!.thumbnail!)
                         : null,
-                    child: contact?.thumbnail == null 
+                    child: contact?.thumbnail == null
                         ? Text(
                             displayName[0].toUpperCase(),
                             style: const TextStyle(fontSize: 36),
                           )
                         : null,
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   Text(
                     displayName,
                     style: const TextStyle(
@@ -101,19 +100,17 @@ class _QuizQuestion extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   const Text(
                     'How often do you want to\nstay in touch?',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Options
                   _FrequencyOption(
                     title: 'Every few days',
@@ -123,9 +120,9 @@ class _QuizQuestion extends ConsumerWidget {
                     icon: Icons.local_florist,
                     onTap: () => _selectDifficulty(ref, 3),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   _FrequencyOption(
                     title: 'Weekly',
                     subtitle: 'Medium maintenance plant',
@@ -134,9 +131,9 @@ class _QuizQuestion extends ConsumerWidget {
                     icon: Icons.eco,
                     onTap: () => _selectDifficulty(ref, 2),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   _FrequencyOption(
                     title: 'Monthly or less',
                     subtitle: 'Low maintenance plant',
@@ -145,7 +142,7 @@ class _QuizQuestion extends ConsumerWidget {
                     icon: Icons.grass,
                     onTap: () => _selectDifficulty(ref, 1),
                   ),
-                  
+
                   const Spacer(),
                 ],
               ),
@@ -155,12 +152,11 @@ class _QuizQuestion extends ConsumerWidget {
       },
     );
   }
-  
+
   void _selectDifficulty(WidgetRef ref, int difficulty) {
-    ref.read(onboardingProvider.notifier).setContactDifficulty(
-      contactId,
-      difficulty,
-    );
+    ref
+        .read(onboardingProvider.notifier)
+        .setContactDifficulty(contactId, difficulty);
   }
 }
 
@@ -171,7 +167,7 @@ class _FrequencyOption extends StatelessWidget {
   final Color color;
   final IconData icon;
   final VoidCallback onTap;
-  
+
   const _FrequencyOption({
     required this.title,
     required this.subtitle,
@@ -180,7 +176,7 @@ class _FrequencyOption extends StatelessWidget {
     required this.icon,
     required this.onTap,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -210,10 +206,7 @@ class _FrequencyOption extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade700,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                   ),
                   Text(
                     plants,

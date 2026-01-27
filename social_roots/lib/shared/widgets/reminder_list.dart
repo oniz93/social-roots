@@ -13,19 +13,17 @@ final upcomingRemindersProvider = FutureProvider<List<Note>>((ref) async {
 
 class ReminderList extends ConsumerWidget {
   const ReminderList({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final remindersAsync = ref.watch(upcomingRemindersProvider);
-    
+
     return remindersAsync.when(
       data: (reminders) {
         if (reminders.isEmpty) {
-          return const Center(
-            child: Text('No upcoming reminders'),
-          );
+          return const Center(child: Text('No upcoming reminders'));
         }
-        
+
         return ListView.builder(
           itemCount: reminders.length,
           itemBuilder: (context, index) {
@@ -41,13 +39,13 @@ class ReminderList extends ConsumerWidget {
 
 class ReminderTile extends ConsumerWidget {
   final Note note;
-  
+
   const ReminderTile({super.key, required this.note});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final plantAsync = ref.watch(plantDetailProvider(note.plantId));
-    
+
     return plantAsync.when(
       data: (plant) {
         return ListTile(
@@ -66,10 +64,7 @@ class ReminderTile extends ConsumerWidget {
               ),
               Text(
                 DateFormat.yMMMd().add_jm().format(note.reminderDate!),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
           ),
@@ -88,18 +83,14 @@ class ReminderTile extends ConsumerWidget {
           },
         );
       },
-      loading: () => const ListTile(
-        leading: CircularProgressIndicator(),
-      ),
-      error: (e, _) => ListTile(
-        title: Text('Error: $e'),
-      ),
+      loading: () => const ListTile(leading: CircularProgressIndicator()),
+      error: (e, _) => ListTile(title: Text('Error: $e')),
     );
   }
-  
+
   Future<void> _completeReminder(WidgetRef ref) async {
     final repository = ref.read(noteRepositoryProvider);
     await repository.completeReminder(note.id);
-    ref.refresh(upcomingRemindersProvider);
+    ref.invalidate(upcomingRemindersProvider);
   }
 }

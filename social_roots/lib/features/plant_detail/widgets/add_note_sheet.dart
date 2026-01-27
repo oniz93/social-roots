@@ -9,14 +9,14 @@ class AddNoteSheet extends ConsumerStatefulWidget {
   final int plantId;
   final Note? existingNote;
   final VoidCallback onSaved;
-  
+
   const AddNoteSheet({
     super.key,
     required this.plantId,
     this.existingNote,
     required this.onSaved,
   });
-  
+
   @override
   ConsumerState<AddNoteSheet> createState() => _AddNoteSheetState();
 }
@@ -27,9 +27,9 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
   final Set<String> _selectedTags = {};
   DateTime? _reminderDate;
   bool _showReminder = false;
-  
+
   bool get isEditing => widget.existingNote != null;
-  
+
   @override
   void initState() {
     super.initState();
@@ -37,18 +37,19 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
       _contentController.text = widget.existingNote!.content;
       _selectedTags.addAll(widget.existingNote!.tags);
       _reminderDate = widget.existingNote!.reminderDate;
-      _reminderMessageController.text = widget.existingNote!.reminderMessage ?? '';
+      _reminderMessageController.text =
+          widget.existingNote!.reminderMessage ?? '';
       _showReminder = _reminderDate != null;
     }
   }
-  
+
   @override
   void dispose() {
     _contentController.dispose();
     _reminderMessageController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -76,14 +77,11 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Quick Tags
-              Text(
-                'Quick Tags',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
+              Text('Quick Tags', style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -107,9 +105,9 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                   );
                 }).toList(),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Content
               TextField(
                 controller: _contentController,
@@ -124,9 +122,9 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                 maxLines: 5,
                 textCapitalization: TextCapitalization.sentences,
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Reminder toggle
               SwitchListTile(
                 title: const Text('Set Reminder'),
@@ -142,11 +140,11 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                 },
                 contentPadding: EdgeInsets.zero,
               ),
-              
+
               // Reminder options
               if (_showReminder) ...[
                 const SizedBox(height: 16),
-                
+
                 // Date picker
                 ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -159,7 +157,7 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _selectDate(context),
                 ),
-                
+
                 // Reminder message
                 TextField(
                   controller: _reminderMessageController,
@@ -173,9 +171,9 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                   textCapitalization: TextCapitalization.sentences,
                 ),
               ],
-              
+
               const SizedBox(height: 24),
-              
+
               // Save button
               ElevatedButton(
                 onPressed: _contentController.text.isNotEmpty ? _save : null,
@@ -185,7 +183,7 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                 ),
                 child: Text(isEditing ? 'Save Changes' : 'Add Note'),
               ),
-              
+
               const SizedBox(height: 16),
             ],
           ),
@@ -193,7 +191,7 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
       ),
     );
   }
-  
+
   Future<void> _selectDate(BuildContext context) async {
     final now = DateTime.now();
     final picked = await showDatePicker(
@@ -202,16 +200,16 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
       firstDate: now,
       lastDate: now.add(const Duration(days: 365)),
     );
-    
-    if (picked != null) {
+
+    if (picked != null && mounted) {
       final time = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(
           _reminderDate ?? DateTime.now().add(const Duration(hours: 1)),
         ),
       );
-      
-      if (time != null) {
+
+      if (time != null && mounted) {
         setState(() {
           _reminderDate = DateTime(
             picked.year,
@@ -224,17 +222,17 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
       }
     }
   }
-  
+
   Future<void> _save() async {
     final repository = ref.read(noteRepositoryProvider);
-    
+
     if (isEditing) {
       await repository.updateNote(
         noteId: widget.existingNote!.id,
         content: _contentController.text,
         tags: _selectedTags.toList(),
       );
-      
+
       if (_showReminder && _reminderDate != null) {
         await repository.setReminder(
           noteId: widget.existingNote!.id,
@@ -252,12 +250,13 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
         content: _contentController.text,
         tags: _selectedTags.toList(),
         reminderDate: _showReminder ? _reminderDate : null,
-        reminderMessage: _showReminder && _reminderMessageController.text.isNotEmpty
+        reminderMessage:
+            _showReminder && _reminderMessageController.text.isNotEmpty
             ? _reminderMessageController.text
             : null,
       );
     }
-    
+
     widget.onSaved();
   }
 }

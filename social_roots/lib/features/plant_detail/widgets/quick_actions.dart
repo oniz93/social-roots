@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/models/plant.dart';
-import '../../../core/services/contact_service.dart';
 
 class QuickActions extends StatelessWidget {
   final Plant plant;
-  
+
   const QuickActions({super.key, required this.plant});
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,7 +37,7 @@ class QuickActions extends StatelessWidget {
       ),
     );
   }
-  
+
   Future<void> _makeCall() async {
     // In real implementation, get phone from contact
     // For now, show placeholder
@@ -47,14 +46,14 @@ class QuickActions extends StatelessWidget {
       await launchUrl(uri);
     }
   }
-  
+
   Future<void> _sendMessage() async {
     final uri = Uri.parse('sms:+1234567890');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     }
   }
-  
+
   Future<void> _sendEmail() async {
     final uri = Uri.parse('mailto:example@email.com');
     if (await canLaunchUrl(uri)) {
@@ -68,14 +67,14 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback onTap;
-  
+
   const _ActionButton({
     required this.icon,
     required this.label,
     required this.color,
     required this.onTap,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -93,10 +92,7 @@ class _ActionButton extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: color, fontWeight: FontWeight.w500),
             ),
           ],
         ),

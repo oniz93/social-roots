@@ -167,6 +167,24 @@ class PlantRepository {
     });
   }
 
+  /// Update an existing plant
+  Future<void> updatePlant({
+    required int id,
+    required String displayName,
+    required PlantType plantType,
+    required int difficultyLevel,
+  }) async {
+    await _isar.writeTxn(() async {
+      final plant = await _isar.plants.get(id);
+      if (plant == null) return;
+
+      plant.displayName = displayName;
+      plant.plantType = plantType;
+      plant.difficultyLevel = difficultyLevel;
+      await _isar.plants.put(plant);
+    });
+  }
+
   /// Delete a plant permanently
   Future<void> deletePlant(int plantId) async {
     await _isar.writeTxn(() async {

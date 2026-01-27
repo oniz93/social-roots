@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/contact_service.dart';
@@ -9,7 +8,7 @@ import '../providers/onboarding_provider.dart';
 
 class PlantCreationPage extends ConsumerStatefulWidget {
   const PlantCreationPage({super.key});
-  
+
   @override
   ConsumerState<PlantCreationPage> createState() => _PlantCreationPageState();
 }
@@ -20,7 +19,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
   int _createdCount = 0;
   int _totalCount = 0;
   bool _isComplete = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -30,34 +29,34 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
     );
     _createPlants();
   }
-  
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-  
+
   Future<void> _createPlants() async {
     final state = ref.read(onboardingProvider);
     final contactService = ref.read(contactServiceProvider);
     final plantRepository = ref.read(plantRepositoryProvider);
-    
+
     final contactIds = state.selectedContactIds.toList();
     setState(() => _totalCount = contactIds.length);
-    
+
     for (int i = 0; i < contactIds.length; i++) {
       final contactId = contactIds[i];
-      
+
       // Get contact details
       final contact = await contactService.getContact(contactId);
       if (contact == null) continue;
-      
+
       // Determine difficulty (from quiz or default to 2)
       final difficulty = state.contactDifficulties[contactId] ?? 2;
-      
+
       // Assign plant type based on difficulty
       final plantType = _getPlantTypeForDifficulty(difficulty);
-      
+
       // Create the plant
       await plantRepository.createPlant(
         contactId: contactId,
@@ -65,28 +64,36 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
         plantType: plantType,
         difficultyLevel: difficulty,
       );
-      
+
       setState(() => _createdCount = i + 1);
-      
+
       // Small delay for animation effect
       await Future.delayed(const Duration(milliseconds: 200));
     }
-    
+
     setState(() => _isComplete = true);
-    
+
     // Mark onboarding complete
     await ref.read(onboardingProvider.notifier).completeOnboarding();
   }
-  
+
   PlantType _getPlantTypeForDifficulty(int difficulty) {
     switch (difficulty) {
       case 1:
         // Easy - randomly pick from easy plants
-        final easyPlants = [PlantType.cactus, PlantType.snakePlant, PlantType.succulent];
+        final easyPlants = [
+          PlantType.cactus,
+          PlantType.snakePlant,
+          PlantType.succulent,
+        ];
         return easyPlants[DateTime.now().millisecond % easyPlants.length];
       case 2:
         // Medium
-        final mediumPlants = [PlantType.monstera, PlantType.sunflower, PlantType.pothos];
+        final mediumPlants = [
+          PlantType.monstera,
+          PlantType.sunflower,
+          PlantType.pothos,
+        ];
         return mediumPlants[DateTime.now().millisecond % mediumPlants.length];
       case 3:
         // Hard
@@ -96,7 +103,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
         return PlantType.monstera;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -104,10 +111,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Colors.green.shade300,
-            Colors.green.shade600,
-          ],
+          colors: [Colors.green.shade300, Colors.green.shade600],
         ),
       ),
       child: SafeArea(
@@ -117,7 +121,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              
+
               // Animation area
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
@@ -143,8 +147,8 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                         alignment: Alignment.center,
                         children: [
                           CircularProgressIndicator(
-                            value: _totalCount > 0 
-                                ? _createdCount / _totalCount 
+                            value: _totalCount > 0
+                                ? _createdCount / _totalCount
                                 : null,
                             strokeWidth: 6,
                             valueColor: AlwaysStoppedAnimation(
@@ -159,12 +163,12 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                         ],
                       ),
               ),
-              
+
               const SizedBox(height: 48),
-              
+
               // Status text
               Text(
-                _isComplete 
+                _isComplete
                     ? 'Your Garden is Ready!'
                     : 'Planting Your Garden...',
                 style: const TextStyle(
@@ -174,12 +178,12 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                 ),
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Progress count
               Text(
-                _isComplete 
+                _isComplete
                     ? '$_totalCount plants created'
                     : '$_createdCount of $_totalCount',
                 style: TextStyle(
@@ -187,9 +191,9 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                   color: Colors.white.withOpacity(0.9),
                 ),
               ),
-              
+
               const Spacer(),
-              
+
               // Continue button
               if (_isComplete)
                 ElevatedButton(
@@ -209,7 +213,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-              
+
               const SizedBox(height: 32),
             ],
           ),

@@ -9,13 +9,13 @@ import 'add_note_sheet.dart';
 
 class NotesSection extends ConsumerWidget {
   final int plantId;
-  
+
   const NotesSection({super.key, required this.plantId});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notesAsync = ref.watch(notesProvider(plantId));
-    
+
     return notesAsync.when(
       data: (notes) {
         if (notes.isEmpty) {
@@ -80,7 +80,7 @@ class NotesSection extends ConsumerWidget {
       error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
-  
+
   void _showAddNoteSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
@@ -89,12 +89,12 @@ class NotesSection extends ConsumerWidget {
         plantId: plantId,
         onSaved: () {
           Navigator.pop(context);
-          ref.refresh(notesProvider(plantId));
+          ref.invalidate(notesProvider(plantId));
         },
       ),
     );
   }
-  
+
   void _showEditNoteSheet(BuildContext context, WidgetRef ref, Note note) {
     showModalBottomSheet(
       context: context,
@@ -104,16 +104,16 @@ class NotesSection extends ConsumerWidget {
         existingNote: note,
         onSaved: () {
           Navigator.pop(context);
-          ref.refresh(notesProvider(plantId));
+          ref.invalidate(notesProvider(plantId));
         },
       ),
     );
   }
-  
+
   Future<void> _deleteNote(WidgetRef ref, Note note) async {
     final repository = ref.read(noteRepositoryProvider);
     await repository.deleteNote(note.id);
-    ref.refresh(notesProvider(plantId));
+    ref.invalidate(notesProvider(plantId));
   }
 }
 
@@ -121,14 +121,14 @@ class NoteCard extends StatelessWidget {
   final Note note;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
-  
+
   const NoteCard({
     super.key,
     required this.note,
     required this.onEdit,
     required this.onDelete,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -146,48 +146,47 @@ class NoteCard extends StatelessWidget {
                 Wrap(
                   spacing: 8,
                   runSpacing: 4,
-                  children: note.tags.map((tag) => Chip(
-                    label: Text(tag, style: const TextStyle(fontSize: 12)),
-                    backgroundColor: _getTagColor(tag).withOpacity(0.2),
-                    labelStyle: TextStyle(color: _getTagColor(tag)),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: EdgeInsets.zero,
-                  )).toList(),
+                  children: note.tags
+                      .map(
+                        (tag) => Chip(
+                          label: Text(
+                            tag,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          backgroundColor: _getTagColor(tag).withOpacity(0.2),
+                          labelStyle: TextStyle(color: _getTagColor(tag)),
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          padding: EdgeInsets.zero,
+                        ),
+                      )
+                      .toList(),
                 ),
-              
-              if (note.tags.isNotEmpty)
-                const SizedBox(height: 8),
-              
+
+              if (note.tags.isNotEmpty) const SizedBox(height: 8),
+
               // Content
-              Text(
-                note.content,
-                style: const TextStyle(fontSize: 15),
-              ),
-              
+              Text(note.content, style: const TextStyle(fontSize: 15)),
+
               const SizedBox(height: 12),
-              
+
               // Footer
               Row(
                 children: [
                   // Date
                   Text(
                     DateFormat.yMMMd().format(note.createdAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
-                  
+
                   // Reminder indicator
                   if (note.reminderDate != null) ...[
                     const SizedBox(width: 12),
                     Icon(
-                      note.reminderCompleted 
-                          ? Icons.check_circle 
-                          : Icons.alarm,
+                      note.reminderCompleted ? Icons.check_circle : Icons.alarm,
                       size: 16,
-                      color: note.reminderCompleted 
-                          ? Colors.green 
+                      color: note.reminderCompleted
+                          ? Colors.green
                           : Colors.orange,
                     ),
                     const SizedBox(width: 4),
@@ -195,15 +194,15 @@ class NoteCard extends StatelessWidget {
                       DateFormat.MMMd().format(note.reminderDate!),
                       style: TextStyle(
                         fontSize: 12,
-                        color: note.reminderCompleted 
-                            ? Colors.green 
+                        color: note.reminderCompleted
+                            ? Colors.green
                             : Colors.orange,
                       ),
                     ),
                   ],
-                  
+
                   const Spacer(),
-                  
+
                   // Delete button
                   IconButton(
                     onPressed: () => _showDeleteConfirmation(context),
@@ -219,7 +218,7 @@ class NoteCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Color _getTagColor(String tag) {
     switch (tag.toLowerCase()) {
       case 'birthday':
@@ -242,7 +241,7 @@ class NoteCard extends StatelessWidget {
         return Colors.grey;
     }
   }
-  
+
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
       context: context,

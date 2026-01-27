@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Controls Rive plant animations based on health state
 class PlantAnimationController {
-  late RiveAnimationController _controller;
-  late StateMachineController? _stateMachine;
+  StateMachineController? _stateMachine;
   SMINumber? _healthInput;
   SMITrigger? _waterTrigger;
   SMITrigger? _reviveTrigger;

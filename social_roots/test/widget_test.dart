@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:social_roots/app.dart';
@@ -27,8 +26,8 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check if the GardenScreen (empty state) is displayed
-    // The empty state has text "Your garden is empty"
-    expect(find.text('Your garden is empty'), findsOneWidget);
+    // The empty state has text "Your garden awaits"
+    expect(find.text('Your garden awaits'), findsOneWidget);
     expect(find.text('Plant Your First Seed'), findsOneWidget);
   });
 }

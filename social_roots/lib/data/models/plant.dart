@@ -138,7 +138,7 @@ extension PlantTypeExtension on PlantType {
   }
 
   String get riveAssetPath {
-    return 'assets/rive/plants/${name}.riv';
+    return 'assets/rive/plants/$name.riv';
   }
 }
 

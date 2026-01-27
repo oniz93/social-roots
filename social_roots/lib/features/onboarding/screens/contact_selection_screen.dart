@@ -13,10 +13,7 @@ final selectedContactsProvider = StateProvider<Set<String>>((ref) => {});
 class ContactSelectionScreen extends ConsumerStatefulWidget {
   final bool isOnboarding;
 
-  const ContactSelectionScreen({
-    super.key, 
-    this.isOnboarding = false,
-  });
+  const ContactSelectionScreen({super.key, this.isOnboarding = false});
 
   @override
   ConsumerState<ContactSelectionScreen> createState() =>
@@ -56,8 +53,13 @@ class _ContactSelectionScreenState
             )
           else if (selectedContacts.isNotEmpty)
             TextButton(
-              onPressed: () => _createGardenAndProceed(context, contactsAsync.value ?? []),
-              child: Text(widget.isOnboarding ? 'Next (${selectedContacts.length})' : 'Finish (${selectedContacts.length})'),
+              onPressed: () =>
+                  _createGardenAndProceed(context, contactsAsync.value ?? []),
+              child: Text(
+                widget.isOnboarding
+                    ? 'Next (${selectedContacts.length})'
+                    : 'Finish (${selectedContacts.length})',
+              ),
             )
           else
             TextButton(
@@ -113,8 +115,13 @@ class _ContactSelectionScreenState
                 // Wait for plants to load to ensure filtering is correct
                 return plantsAsync.when(
                   data: (plants) {
-                    final existingContactIds = plants.map((p) => p.contactId).toSet();
-                    final filtered = _filterContacts(contacts, existingContactIds);
+                    final existingContactIds = plants
+                        .map((p) => p.contactId)
+                        .toSet();
+                    final filtered = _filterContacts(
+                      contacts,
+                      existingContactIds,
+                    );
 
                     if (filtered.isEmpty) {
                       return Center(
@@ -130,7 +137,9 @@ class _ContactSelectionScreenState
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {
                         final contact = filtered[index];
-                        final isSelected = selectedContacts.contains(contact.id);
+                        final isSelected = selectedContacts.contains(
+                          contact.id,
+                        );
 
                         return _ContactListItem(
                           contact: contact,
@@ -140,8 +149,10 @@ class _ContactSelectionScreenState
                       },
                     );
                   },
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => const Center(child: Text('Error loading garden data')),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (_, __) =>
+                      const Center(child: Text('Error loading garden data')),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -153,24 +164,36 @@ class _ContactSelectionScreenState
       ),
       floatingActionButton: selectedContacts.isNotEmpty
           ? FloatingActionButton.extended(
-              onPressed: _isProcessing 
-                  ? null 
-                  : () => _createGardenAndProceed(context, contactsAsync.value ?? []),
+              onPressed: _isProcessing
+                  ? null
+                  : () => _createGardenAndProceed(
+                      context,
+                      contactsAsync.value ?? [],
+                    ),
               icon: const Icon(Icons.check),
-              label: Text(_isProcessing 
-                  ? 'Processing...' 
-                  : (widget.isOnboarding ? 'Next (${selectedContacts.length})' : 'Create Garden (${selectedContacts.length})')),
+              label: Text(
+                _isProcessing
+                    ? 'Processing...'
+                    : (widget.isOnboarding
+                          ? 'Next (${selectedContacts.length})'
+                          : 'Create Garden (${selectedContacts.length})'),
+              ),
             )
           : null,
     );
   }
 
-  List<Contact> _filterContacts(List<Contact> contacts, Set<String> existingContactIds) {
+  List<Contact> _filterContacts(
+    List<Contact> contacts,
+    Set<String> existingContactIds,
+  ) {
     var filtered = contacts;
-    
+
     // Filter out existing plants
     if (existingContactIds.isNotEmpty) {
-      filtered = filtered.where((c) => !existingContactIds.contains(c.id)).toList();
+      filtered = filtered
+          .where((c) => !existingContactIds.contains(c.id))
+          .toList();
     }
 
     if (_searchQuery.isEmpty) return filtered;
@@ -192,27 +215,32 @@ class _ContactSelectionScreenState
     }
   }
 
-  Future<void> _createGardenAndProceed(BuildContext context, List<Contact> allContacts) async {
+  Future<void> _createGardenAndProceed(
+    BuildContext context,
+    List<Contact> allContacts,
+  ) async {
     final selectedIds = ref.read(selectedContactsProvider);
-    
+
     if (widget.isOnboarding) {
-       // Update onboarding state and proceed to quiz
-       ref.read(onboardingProvider.notifier).setSelectedContacts(selectedIds);
-       ref.read(onboardingProvider.notifier).nextStep();
-       return;
+      // Update onboarding state and proceed to quiz
+      ref.read(onboardingProvider.notifier).setSelectedContacts(selectedIds);
+      ref.read(onboardingProvider.notifier).nextStep();
+      return;
     }
 
     // Standalone mode: Create plants immediately
     setState(() => _isProcessing = true);
     final repository = ref.read(plantRepositoryProvider);
-    
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
     try {
       for (final id in selectedIds) {
         final contact = allContacts.firstWhere(
           (c) => c.id == id,
           orElse: () => Contact(id: id, displayName: 'Unknown'),
         );
-        
+
         await repository.createPlant(
           contactId: contact.id,
           displayName: contact.displayName,
@@ -221,21 +249,21 @@ class _ContactSelectionScreenState
           photoUrl: null, // TODO: Handle photo persistence
         );
       }
-      
+
       if (mounted) {
         // Clear selection
         ref.read(selectedContactsProvider.notifier).state = {};
-        
-        ScaffoldMessenger.of(context).showSnackBar(
+
+        scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Garden updated successfully!')),
         );
-        
+
         // Return to previous screen (Garden)
-        Navigator.of(context).pop();
+        navigator.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           SnackBar(content: Text('Error creating garden: $e')),
         );
         setState(() => _isProcessing = false);
