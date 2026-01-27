@@ -13,16 +13,13 @@ import '../widgets/water_button.dart';
 
 class PlantDetailScreen extends ConsumerWidget {
   final int plantId;
-  
-  const PlantDetailScreen({
-    super.key,
-    required this.plantId,
-  });
-  
+
+  const PlantDetailScreen({super.key, required this.plantId});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final plantAsync = ref.watch(plantDetailProvider(plantId));
-    
+
     return plantAsync.when(
       data: (plant) {
         if (plant == null) {
@@ -47,33 +44,34 @@ class PlantDetailScreen extends ConsumerWidget {
 
 class _PlantDetailContent extends ConsumerStatefulWidget {
   final Plant plant;
-  
+
   const _PlantDetailContent({required this.plant});
-  
+
   @override
-  ConsumerState<_PlantDetailContent> createState() => _PlantDetailContentState();
+  ConsumerState<_PlantDetailContent> createState() =>
+      _PlantDetailContentState();
 }
 
 class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
-  
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final plant = widget.plant;
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -117,7 +115,7 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
               ),
             ],
           ),
-          
+
           // Health status card
           SliverToBoxAdapter(
             child: Padding(
@@ -125,20 +123,16 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
               child: HealthStatusCard(plant: plant),
             ),
           ),
-          
+
           // Quick action buttons (Call, Message, Email)
-          SliverToBoxAdapter(
-            child: QuickActions(plant: plant),
-          ),
-          
+          SliverToBoxAdapter(child: QuickActions(plant: plant)),
+
           // Tab bar for History/Notes
           SliverPersistentHeader(
             pinned: true,
-            delegate: _TabBarDelegate(
-              tabController: _tabController,
-            ),
+            delegate: _TabBarDelegate(tabController: _tabController),
           ),
-          
+
           // Tab content
           SliverFillRemaining(
             child: TabBarView(
@@ -151,7 +145,7 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
           ),
         ],
       ),
-      
+
       // Water button
       floatingActionButton: WaterButton(
         plant: plant,
@@ -160,7 +154,7 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-  
+
   Color _getBackgroundColor(PlantHealthState state) {
     switch (state) {
       case PlantHealthState.thriving:
@@ -175,22 +169,28 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
         return Colors.grey.shade400;
     }
   }
-  
+
   void _handleMenuAction(String action, Plant plant) {
     switch (action) {
       case 'snooze':
         _showSnoozeDialog(plant);
         break;
       case 'edit':
-        // Navigator.pushNamed(context, '/edit-plant', arguments: plant.id); // Not implemented yet
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Edit coming soon')));
+        Navigator.pushNamed(context, '/edit-plant', arguments: plant.id).then((
+          result,
+        ) {
+          // Refresh if changes were made
+          if (result == true) {
+            ref.refresh(plantDetailProvider(plant.id));
+          }
+        });
         break;
       case 'compost':
         _showCompostConfirmation(plant);
         break;
     }
   }
-  
+
   void _showSnoozeDialog(Plant plant) {
     showModalBottomSheet(
       context: context,
@@ -226,16 +226,16 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
       ),
     );
   }
-  
+
   void _snooze(Duration duration) {
     final repository = ref.read(plantRepositoryProvider);
     repository.snoozePlant(widget.plant.id, duration);
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Plant snoozed')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Plant snoozed')));
   }
-  
+
   void _showCompostConfirmation(Plant plant) {
     showDialog(
       context: context,
@@ -257,10 +257,7 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
               Navigator.pop(context); // Close dialog
               Navigator.pop(context); // Go back to garden
             },
-            child: const Text(
-              'Compost',
-              style: TextStyle(color: Colors.red),
-            ),
+            child: const Text('Compost', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -270,9 +267,9 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
 
 class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;
-  
+
   _TabBarDelegate({required this.tabController});
-  
+
   @override
   Widget build(context, shrinkOffset, overlapsContent) {
     return Container(
@@ -289,13 +286,14 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       ),
     );
   }
-  
+
   @override
   double get maxExtent => 72;
-  
+
   @override
   double get minExtent => 72;
-  
+
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }

@@ -294,6 +294,32 @@ class _PlantTypeCard extends StatelessWidget {
     required this.onTap,
   });
 
+  String get _effortLabel {
+    switch (type.defaultDifficulty) {
+      case 1:
+        return 'Low effort';
+      case 2:
+        return 'Medium effort';
+      case 3:
+        return 'High effort';
+      default:
+        return '';
+    }
+  }
+
+  Color get _effortColor {
+    switch (type.defaultDifficulty) {
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -324,7 +350,7 @@ class _PlantTypeCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(6),
                     child: AnimatedPlaceholderPlant(
                       plantType: type,
                       health: 100,
@@ -332,7 +358,7 @@ class _PlantTypeCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: 2),
                   child: Text(
                     type.displayName,
                     style: TextStyle(
@@ -347,6 +373,19 @@ class _PlantTypeCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                // Effort label
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(
+                    _effortLabel,
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w500,
+                      color: _effortColor,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
