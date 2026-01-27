@@ -5,12 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/contact_service.dart';
 import '../../../data/models/plant.dart';
 import '../../../data/repositories/plant_repository.dart';
+import '../providers/onboarding_provider.dart';
 
 // Selected contacts state
 final selectedContactsProvider = StateProvider<Set<String>>((ref) => {});
 
 class ContactSelectionScreen extends ConsumerStatefulWidget {
-  const ContactSelectionScreen({super.key});
+  final bool isOnboarding;
+
+  const ContactSelectionScreen({
+    super.key, 
+    this.isOnboarding = false,
+  });
 
   @override
   ConsumerState<ContactSelectionScreen> createState() =>
@@ -51,7 +57,7 @@ class _ContactSelectionScreenState
           else if (selectedContacts.isNotEmpty)
             TextButton(
               onPressed: () => _createGardenAndProceed(context, contactsAsync.value ?? []),
-              child: Text('Finish (${selectedContacts.length})'),
+              child: Text(widget.isOnboarding ? 'Next (${selectedContacts.length})' : 'Finish (${selectedContacts.length})'),
             )
           else
             TextButton(
@@ -151,7 +157,9 @@ class _ContactSelectionScreenState
                   ? null 
                   : () => _createGardenAndProceed(context, contactsAsync.value ?? []),
               icon: const Icon(Icons.check),
-              label: Text(_isProcessing ? 'Creating Garden...' : 'Create Garden (${selectedContacts.length})'),
+              label: Text(_isProcessing 
+                  ? 'Processing...' 
+                  : (widget.isOnboarding ? 'Next (${selectedContacts.length})' : 'Create Garden (${selectedContacts.length})')),
             )
           : null,
     );
@@ -185,9 +193,17 @@ class _ContactSelectionScreenState
   }
 
   Future<void> _createGardenAndProceed(BuildContext context, List<Contact> allContacts) async {
-    setState(() => _isProcessing = true);
-    
     final selectedIds = ref.read(selectedContactsProvider);
+    
+    if (widget.isOnboarding) {
+       // Update onboarding state and proceed to quiz
+       ref.read(onboardingProvider.notifier).setSelectedContacts(selectedIds);
+       ref.read(onboardingProvider.notifier).nextStep();
+       return;
+    }
+
+    // Standalone mode: Create plants immediately
+    setState(() => _isProcessing = true);
     final repository = ref.read(plantRepositoryProvider);
     
     try {
@@ -211,11 +227,11 @@ class _ContactSelectionScreenState
         ref.read(selectedContactsProvider.notifier).state = {};
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Garden created successfully!')),
+          const SnackBar(content: Text('Garden updated successfully!')),
         );
         
-        // Navigate to Garden (Home) and remove all previous routes
-        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        // Return to previous screen (Garden)
+        Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {

@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/contact_service.dart';
+import '../providers/onboarding_provider.dart';
 
 class PermissionScreen extends ConsumerWidget {
-  const PermissionScreen({super.key});
+  final bool isOnboarding;
+  
+  const PermissionScreen({
+    super.key, 
+    this.isOnboarding = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen for permission changes to trigger navigation
     ref.listen(contactPermissionProvider, (previous, next) {
       if (next == ContactPermissionStatus.granted) {
-        Navigator.of(context).pushReplacementNamed('/contact-selection');
+        _proceed(context, ref);
       }
     });
 
@@ -103,6 +109,14 @@ class PermissionScreen extends ConsumerWidget {
     );
   }
 
+  void _proceed(BuildContext context, WidgetRef ref) {
+    if (isOnboarding) {
+      ref.read(onboardingProvider.notifier).nextStep();
+    } else {
+      Navigator.of(context).pushReplacementNamed('/contact-selection');
+    }
+  }
+
   Widget _buildActionButton(
     BuildContext context,
     WidgetRef ref,
@@ -144,9 +158,7 @@ class PermissionScreen extends ConsumerWidget {
 
       case ContactPermissionStatus.granted:
         return ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/contact-selection');
-          },
+          onPressed: () => _proceed(context, ref),
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 56),
             backgroundColor: Colors.green,

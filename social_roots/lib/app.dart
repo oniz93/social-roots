@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'features/onboarding/screens/startup_screen.dart';
+import 'features/onboarding/screens/onboarding_screen.dart';
 import 'features/onboarding/screens/permission_screen.dart';
 import 'features/onboarding/screens/contact_selection_screen.dart';
 import 'features/onboarding/screens/manual_mode_screen.dart';
@@ -21,7 +23,9 @@ class SocialRootsApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const GardenScreen(),
+        '/': (context) => const StartupScreen(),
+        '/onboarding': (context) => const OnboardingScreen(),
+        '/garden': (context) => const GardenScreen(),
         '/permissions': (context) => const PermissionScreen(),
         '/contact-selection': (context) => const ContactSelectionScreen(),
         '/manual-mode': (context) => const ManualModeScreen(),
