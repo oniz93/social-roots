@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EmptyGardenState extends StatelessWidget {
+import '../../../core/services/contact_service.dart';
+
+class EmptyGardenState extends ConsumerWidget {
   const EmptyGardenState({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -34,10 +37,14 @@ class EmptyGardenState extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
-              onPressed: () => Navigator.pushNamed(
-                context,
-                '/contact-selection',
-              ), // Changed to match existing route
+              onPressed: () {
+                final status = ref.read(contactPermissionProvider);
+                if (status == ContactPermissionStatus.granted) {
+                  Navigator.pushNamed(context, '/contact-selection');
+                } else {
+                  Navigator.pushNamed(context, '/permissions');
+                }
+              },
               icon: const Icon(Icons.add),
               label: const Text('Plant Your First Seed'),
               style: ElevatedButton.styleFrom(

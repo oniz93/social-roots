@@ -8,6 +8,13 @@ class PermissionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Listen for permission changes to trigger navigation
+    ref.listen(contactPermissionProvider, (previous, next) {
+      if (next == ContactPermissionStatus.granted) {
+        Navigator.of(context).pushReplacementNamed('/contact-selection');
+      }
+    });
+
     final permissionStatus = ref.watch(contactPermissionProvider);
 
     return Scaffold(
@@ -136,11 +143,19 @@ class PermissionScreen extends ConsumerWidget {
         );
 
       case ContactPermissionStatus.granted:
-        // Navigate to contact selection
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushReplacementNamed('/contact-selection');
-        });
-        return const CircularProgressIndicator();
+        return ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/contact-selection');
+          },
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 56),
+            backgroundColor: Colors.green,
+          ),
+          child: const Text(
+            'Continue',
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        );
 
       case ContactPermissionStatus.restricted:
         return Text(

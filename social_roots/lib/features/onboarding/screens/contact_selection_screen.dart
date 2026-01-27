@@ -3,6 +3,8 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/contact_service.dart';
+import '../../../data/models/plant.dart';
+import '../../../data/repositories/plant_repository.dart';
 
 // Selected contacts state
 final selectedContactsProvider = StateProvider<Set<String>>((ref) => {});
@@ -19,6 +21,7 @@ class _ContactSelectionScreenState
     extends ConsumerState<ContactSelectionScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  bool _isProcessing = false;
 
   @override
   void dispose() {
@@ -29,16 +32,31 @@ class _ContactSelectionScreenState
   @override
   Widget build(BuildContext context) {
     final contactsAsync = ref.watch(contactsProvider);
+    final plantsAsync = ref.watch(plantsStreamProvider);
     final selectedContacts = ref.watch(selectedContactsProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Your Core Circle'),
         actions: [
-          if (selectedContacts.isNotEmpty)
+          if (_isProcessing)
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+          else if (selectedContacts.isNotEmpty)
             TextButton(
-              onPressed: () => _proceedToQuiz(context),
-              child: Text('Next (${selectedContacts.length})'),
+              onPressed: () => _createGardenAndProceed(context, contactsAsync.value ?? []),
+              child: Text('Finish (${selectedContacts.length})'),
+            )
+          else
+            TextButton(
+              onPressed: () => _createGardenAndProceed(context, []),
+              child: const Text('Skip'),
             ),
         ],
       ),
@@ -86,30 +104,38 @@ class _ContactSelectionScreenState
           Expanded(
             child: contactsAsync.when(
               data: (contacts) {
-                final filtered = _filterContacts(contacts);
+                // Wait for plants to load to ensure filtering is correct
+                return plantsAsync.when(
+                  data: (plants) {
+                    final existingContactIds = plants.map((p) => p.contactId).toSet();
+                    final filtered = _filterContacts(contacts, existingContactIds);
 
-                if (filtered.isEmpty) {
-                  return Center(
-                    child: Text(
-                      _searchQuery.isEmpty
-                          ? 'No contacts found'
-                          : 'No contacts match "$_searchQuery"',
-                    ),
-                  );
-                }
+                    if (filtered.isEmpty) {
+                      return Center(
+                        child: Text(
+                          _searchQuery.isEmpty
+                              ? 'No new contacts found'
+                              : 'No contacts match "$_searchQuery"',
+                        ),
+                      );
+                    }
 
-                return ListView.builder(
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) {
-                    final contact = filtered[index];
-                    final isSelected = selectedContacts.contains(contact.id);
+                    return ListView.builder(
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        final contact = filtered[index];
+                        final isSelected = selectedContacts.contains(contact.id);
 
-                    return _ContactListItem(
-                      contact: contact,
-                      isSelected: isSelected,
-                      onTap: () => _toggleContact(contact.id),
+                        return _ContactListItem(
+                          contact: contact,
+                          isSelected: isSelected,
+                          onTap: () => _toggleContact(contact.id),
+                        );
+                      },
                     );
                   },
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (_, __) => const Center(child: Text('Error loading garden data')),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -121,19 +147,28 @@ class _ContactSelectionScreenState
       ),
       floatingActionButton: selectedContacts.isNotEmpty
           ? FloatingActionButton.extended(
-              onPressed: () => _proceedToQuiz(context),
-              icon: const Icon(Icons.arrow_forward),
-              label: Text('Continue with ${selectedContacts.length}'),
+              onPressed: _isProcessing 
+                  ? null 
+                  : () => _createGardenAndProceed(context, contactsAsync.value ?? []),
+              icon: const Icon(Icons.check),
+              label: Text(_isProcessing ? 'Creating Garden...' : 'Create Garden (${selectedContacts.length})'),
             )
           : null,
     );
   }
 
-  List<Contact> _filterContacts(List<Contact> contacts) {
-    if (_searchQuery.isEmpty) return contacts;
+  List<Contact> _filterContacts(List<Contact> contacts, Set<String> existingContactIds) {
+    var filtered = contacts;
+    
+    // Filter out existing plants
+    if (existingContactIds.isNotEmpty) {
+      filtered = filtered.where((c) => !existingContactIds.contains(c.id)).toList();
+    }
+
+    if (_searchQuery.isEmpty) return filtered;
 
     final query = _searchQuery.toLowerCase();
-    return contacts
+    return filtered
         .where((c) => c.displayName.toLowerCase().contains(query))
         .toList();
   }
@@ -149,8 +184,47 @@ class _ContactSelectionScreenState
     }
   }
 
-  void _proceedToQuiz(BuildContext context) {
-    Navigator.of(context).pushNamed('/plant-quiz');
+  Future<void> _createGardenAndProceed(BuildContext context, List<Contact> allContacts) async {
+    setState(() => _isProcessing = true);
+    
+    final selectedIds = ref.read(selectedContactsProvider);
+    final repository = ref.read(plantRepositoryProvider);
+    
+    try {
+      for (final id in selectedIds) {
+        final contact = allContacts.firstWhere(
+          (c) => c.id == id,
+          orElse: () => Contact(id: id, displayName: 'Unknown'),
+        );
+        
+        await repository.createPlant(
+          contactId: contact.id,
+          displayName: contact.displayName,
+          plantType: PlantType.succulent,
+          difficultyLevel: 1,
+          photoUrl: null, // TODO: Handle photo persistence
+        );
+      }
+      
+      if (mounted) {
+        // Clear selection
+        ref.read(selectedContactsProvider.notifier).state = {};
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Garden created successfully!')),
+        );
+        
+        // Navigate to Garden (Home) and remove all previous routes
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error creating garden: $e')),
+        );
+        setState(() => _isProcessing = false);
+      }
+    }
   }
 }
 

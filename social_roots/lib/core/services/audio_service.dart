@@ -18,26 +18,42 @@ class AudioService {
   /// Play water drop sound
   Future<void> playWaterDrop() async {
     if (_isMuted) return;
-    await _player.play(AssetSource('audio/water_drop.mp3'));
+    try {
+      await _player.play(AssetSource('audio/water_drop.mp3'));
+    } catch (e) {
+      print('Error playing audio: $e');
+    }
   }
   
   /// Play water pour sound
   Future<void> playWaterPour() async {
     if (_isMuted) return;
-    await _player.play(AssetSource('audio/water_pour.mp3'));
+    try {
+      await _player.play(AssetSource('audio/water_pour.mp3'));
+    } catch (e) {
+      print('Error playing audio: $e');
+    }
   }
   
   /// Play revival success chord
   Future<void> playRevivalSuccess() async {
     if (_isMuted) return;
-    await _player.play(AssetSource('audio/revival_success.mp3'));
+    try {
+      await _player.play(AssetSource('audio/revival_success.mp3'));
+    } catch (e) {
+      print('Error playing audio: $e');
+    }
   }
   
   /// Play ambient garden sounds
   Future<void> playAmbient() async {
     if (_isMuted) return;
-    await _player.setReleaseMode(ReleaseMode.loop);
-    await _player.play(AssetSource('audio/garden_ambient.mp3'));
+    try {
+      await _player.setReleaseMode(ReleaseMode.loop);
+      await _player.play(AssetSource('audio/garden_ambient.mp3'));
+    } catch (e) {
+      print('Error playing audio: $e');
+    }
   }
   
   /// Stop all sounds

@@ -19,10 +19,10 @@ class SocialRootsApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Nunito',
       ),
-      initialRoute: '/garden',
+      initialRoute: '/',
       routes: {
-        '/': (context) => const PermissionScreen(),
-        '/garden': (context) => const GardenScreen(),
+        '/': (context) => const GardenScreen(),
+        '/permissions': (context) => const PermissionScreen(),
         '/contact-selection': (context) => const ContactSelectionScreen(),
         '/manual-mode': (context) => const ManualModeScreen(),
         '/plant-quiz': (context) => const PlantQuizScreen(),
