@@ -1,0 +1,72 @@
+name: social_roots
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Database
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.2
+  
+  # State Management
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+  
+  # Contacts
+  flutter_contacts: ^1.1.7+1
+  permission_handler: ^11.1.0
+  
+  # Animation
+  rive: ^0.12.4
+  
+  # UI/UX
+  flutter_haptic: ^0.0.3
+  audioplayers: ^5.2.1
+  cupertino_icons: ^1.0.8
+  
+  # Utilities
+  intl: ^0.18.1
+  uuid: ^4.2.2
+  url_launcher: ^6.2.2
+  share_plus: ^7.2.1
+  
+  # Local Notifications
+  flutter_local_notifications: ^16.3.0
+  
+  # Deep Linking
+  uni_links: ^0.5.1
+  shared_preferences: ^2.5.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  
+  # Code Generation
+  isar_generator: ^3.1.0+1
+  build_runner: ^2.4.8
+  riverpod_generator: ^2.3.9
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/rive/plants/
+    - assets/images/
+    - assets/audio/
+  
+  # fonts:
+  #   - family: Nunito
+  #     fonts:
+  #       - asset: assets/fonts/Nunito-Regular.ttf
+  #       - asset: assets/fonts/Nunito-Bold.ttf
+  #         weight: 700
