@@ -6,16 +6,15 @@ import '../widgets/vacation_mode_card.dart';
 import '../widgets/archived_plants_tile.dart';
 import '../widgets/data_management_section.dart';
 import '../widgets/about_section.dart';
+import '../widgets/debug_menu.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: const [
           VacationModeCard(),
@@ -27,6 +26,8 @@ class SettingsScreen extends ConsumerWidget {
           DataManagementSection(),
           Divider(height: 32),
           AboutSection(),
+          Divider(height: 32),
+          DebugMenu(),
           SizedBox(height: 32),
         ],
       ),

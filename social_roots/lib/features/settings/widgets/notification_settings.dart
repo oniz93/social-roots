@@ -12,13 +12,13 @@ final remindersEnabledProvider = StateProvider<bool>((ref) => true);
 
 class NotificationSettings extends ConsumerWidget {
   const NotificationSettings({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final morningDewEnabled = ref.watch(morningDewEnabledProvider);
     final wiltWarningsEnabled = ref.watch(wiltWarningsEnabledProvider);
     final remindersEnabled = ref.watch(remindersEnabledProvider);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,7 +29,7 @@ class NotificationSettings extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        
+
         SwitchListTile(
           title: const Text('Morning Dew'),
           subtitle: const Text('Daily 9 AM summary of thirsty plants'),
@@ -40,7 +40,7 @@ class NotificationSettings extends ConsumerWidget {
           },
           secondary: const Icon(Icons.wb_sunny),
         ),
-        
+
         SwitchListTile(
           title: const Text('Wilt Warnings'),
           subtitle: const Text('Alerts when plants approach critical state'),
@@ -51,7 +51,7 @@ class NotificationSettings extends ConsumerWidget {
           },
           secondary: const Icon(Icons.warning_amber),
         ),
-        
+
         SwitchListTile(
           title: const Text('Reminders'),
           subtitle: const Text('Notifications for note reminders'),
@@ -62,9 +62,9 @@ class NotificationSettings extends ConsumerWidget {
           },
           secondary: const Icon(Icons.alarm),
         ),
-        
+
         const Divider(),
-        
+
         ListTile(
           leading: const Icon(Icons.schedule),
           title: const Text('Morning Dew Time'),
@@ -74,9 +74,9 @@ class NotificationSettings extends ConsumerWidget {
             // TODO: Time picker
           },
         ),
-        
+
         const Divider(),
-        
+
         Padding(
           padding: const EdgeInsets.all(16),
           child: ElevatedButton.icon(
@@ -91,7 +91,7 @@ class NotificationSettings extends ConsumerWidget {
       ],
     );
   }
-  
+
   Future<void> _updateMorningDew(WidgetRef ref, bool enabled) async {
     final notificationService = ref.read(notificationServiceProvider);
     if (enabled) {
@@ -99,12 +99,12 @@ class NotificationSettings extends ConsumerWidget {
     } else {
       await notificationService.cancelMorningDew();
     }
-    
+
     // Save preference
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('morning_dew_enabled', enabled);
   }
-  
+
   Future<void> _updateWiltWarnings(WidgetRef ref, bool enabled) async {
     if (enabled) {
       final scheduler = ref.read(notificationSchedulerProvider);
@@ -113,14 +113,14 @@ class NotificationSettings extends ConsumerWidget {
       final notificationService = ref.read(notificationServiceProvider);
       await notificationService.cancelAllWiltWarnings();
     }
-    
+
     // Save preference
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('wilt_warnings_enabled', enabled);
   }
-  
+
   Future<void> _testNotification(WidgetRef ref) async {
-    final scheduler = ref.read(notificationSchedulerProvider);
-    await scheduler.triggerMorningDewNow();
+    final notificationService = ref.read(notificationServiceProvider);
+    await notificationService.showTestNotification();
   }
 }

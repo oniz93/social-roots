@@ -262,6 +262,39 @@ class PlantRepository {
 
     return (healthyCount / plants.length) * 100;
   }
+
+  // ==================== DEBUG OPERATIONS ====================
+
+  /// Simulate time passing by adjusting lastWatered for all plants
+  Future<void> debugSimulateTimePassing(Duration duration) async {
+    await _isar.writeTxn(() async {
+      final plants = await _isar.plants
+          .filter()
+          .isArchivedEqualTo(false)
+          .findAll();
+
+      for (final plant in plants) {
+        plant.lastWatered = plant.lastWatered.subtract(duration);
+        await _isar.plants.put(plant);
+      }
+    });
+  }
+
+  /// Reset health for all plants (set lastWatered to now)
+  Future<void> debugResetAllHealth() async {
+    await _isar.writeTxn(() async {
+      final plants = await _isar.plants
+          .filter()
+          .isArchivedEqualTo(false)
+          .findAll();
+
+      for (final plant in plants) {
+        plant.lastWatered = DateTime.now();
+        plant.snoozedUntil = null;
+        await _isar.plants.put(plant);
+      }
+    });
+  }
 }
 
 // Provider

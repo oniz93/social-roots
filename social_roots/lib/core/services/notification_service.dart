@@ -192,6 +192,29 @@ class NotificationService {
     await _plugin.cancel(id: _morningDewNotificationId);
   }
 
+  /// Show a test notification (always fires regardless of plant state)
+  Future<void> showTestNotification() async {
+    await _plugin.show(
+      id: _morningDewNotificationId,
+      title: 'Test Notification ✅',
+      body: 'Notifications are working! Your plants will thank you.',
+      notificationDetails: const NotificationDetails(
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+        android: AndroidNotificationDetails(
+          _morningDewChannelId,
+          'Morning Dew',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+      ),
+      payload: 'garden:all',
+    );
+  }
+
   // ==================== WILT WARNINGS ====================
 
   /// Schedule a Wilt Warning for a specific plant
@@ -307,6 +330,54 @@ class NotificationService {
         ?.checkPermissions();
 
     return iOS?.isEnabled ?? false;
+  }
+
+  // ==================== DEBUG NOTIFICATIONS ====================
+
+  /// Show a test reminder notification
+  Future<void> showTestReminderNotification() async {
+    await _plugin.show(
+      id: _reminderBaseId,
+      title: 'Reminder: Test Plant',
+      body: 'This is a test reminder notification. Check in with your friend!',
+      notificationDetails: const NotificationDetails(
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+        android: AndroidNotificationDetails(
+          _reminderChannelId,
+          'Reminders',
+          importance: Importance.defaultImportance,
+          priority: Priority.defaultPriority,
+        ),
+      ),
+      payload: 'garden:all',
+    );
+  }
+
+  /// Show a test wilt warning notification
+  Future<void> showTestWiltWarningNotification() async {
+    await _plugin.show(
+      id: _wiltWarningBaseId,
+      title: 'Emergency!',
+      body: 'Your Test Plant is losing petals! Water them soon.',
+      notificationDetails: const NotificationDetails(
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+        android: AndroidNotificationDetails(
+          _wiltWarningChannelId,
+          'Wilt Warnings',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+      ),
+      payload: 'garden:all',
+    );
   }
 }
 
