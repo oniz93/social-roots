@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../shared/widgets/animated_plant_widget.dart';
 import '../../../data/models/plant.dart';
 
 class PlantHeader extends StatelessWidget {
@@ -25,17 +26,12 @@ class PlantHeader extends StatelessWidget {
             const SizedBox(height: 40), // Space for app bar
             
             // Plant animation placeholder
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.local_florist,
-                size: 80,
-                color: Colors.white,
+            SizedBox(
+              width: 180,
+              height: 180,
+              child: AnimatedPlantWidget(
+                plantType: plant.plantType,
+                health: plant.currentHealth,
               ),
             ),
             

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_constants.dart';
-import '../../../core/services/plant_animation_service.dart';
+import '../../../shared/widgets/animated_plant_widget.dart';
 import '../../../data/models/plant.dart';
 
 class PlantCard extends StatelessWidget {
@@ -163,32 +162,13 @@ class PlantCard extends StatelessWidget {
   }
 
   Widget _buildPlantVisual() {
-    // We use AnimatedPlant which uses Rive.
-    // Since assets might be missing in dev environment, Rive might fail or show nothing.
-    // Ideally we would wrap this in a builder or error handler, but for now we follow the instruction
-    // to integrate the AnimatedPlant widget.
-
-    if (kEnableRiveAnimations) {
-      return SizedBox(
-        width: 120,
-        height: 120,
-        child: AnimatedPlant(
-          plantType: plant.plantType.name,
-          health: plant.currentHealth,
-        ),
-      );
-    }
-
-    // Fallback Icon
-    final healthState = plant.healthState;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.local_florist, size: 64, color: _getPlantColor(healthState)),
-        if (healthState == PlantHealthState.thirsty ||
-            healthState == PlantHealthState.wilting)
-          const Icon(Icons.water_drop_outlined, size: 20, color: Colors.blue),
-      ],
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: AnimatedPlantWidget(
+        plantType: plant.plantType,
+        health: plant.currentHealth,
+      ),
     );
   }
 
@@ -211,21 +191,6 @@ class PlantCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getPlantColor(PlantHealthState state) {
-    switch (state) {
-      case PlantHealthState.thriving:
-        return Colors.green.shade600;
-      case PlantHealthState.thirsty:
-        return Colors.green.shade400;
-      case PlantHealthState.wilting:
-        return Colors.yellow.shade700;
-      case PlantHealthState.critical:
-        return Colors.orange.shade700;
-      case PlantHealthState.dormant:
-        return Colors.brown.shade400;
-    }
   }
 
   Color _getStateColor(PlantHealthState state) {
