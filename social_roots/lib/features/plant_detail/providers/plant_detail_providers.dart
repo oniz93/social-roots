@@ -4,6 +4,7 @@ import '../../../data/models/plant.dart';
 import '../../../data/models/interaction.dart';
 import '../../../data/models/note.dart';
 import '../../../data/repositories/plant_repository.dart';
+import '../../../data/repositories/note_repository.dart';
 import '../../../core/services/database_service.dart';
 
 // Provider for single plant details
@@ -26,6 +27,6 @@ final interactionHistoryProvider = FutureProvider.family<List<Interaction>, int>
 
 // Notes provider
 final notesProvider = FutureProvider.family<List<Note>, int>((ref, plantId) async {
-  final db = ref.watch(databaseServiceProvider);
-  return db.getNotesForPlant(plantId);
+  final repository = ref.watch(noteRepositoryProvider);
+  return repository.getNotesForPlant(plantId);
 });
