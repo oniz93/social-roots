@@ -185,6 +185,22 @@ class PlantRepository {
     });
   }
 
+  /// Update plant type and reset health to 100%
+  Future<void> updatePlantType({
+    required int id,
+    required PlantType plantType,
+  }) async {
+    await _isar.writeTxn(() async {
+      final plant = await _isar.plants.get(id);
+      if (plant == null) return;
+
+      plant.plantType = plantType;
+      plant.difficultyLevel = plantType.defaultDifficulty;
+      plant.lastWatered = DateTime.now(); // Reset health to 100%
+      await _isar.plants.put(plant);
+    });
+  }
+
   /// Delete a plant permanently
   Future<void> deletePlant(int plantId) async {
     await _isar.writeTxn(() async {
