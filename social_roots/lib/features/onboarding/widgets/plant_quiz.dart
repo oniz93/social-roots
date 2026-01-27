@@ -14,8 +14,16 @@ class PlantQuiz extends ConsumerWidget {
     final contactIds = state.selectedContactIds.toList();
     final currentIndex = state.quizContactIndex;
 
+    // If no contacts selected, skip quiz entirely
+    if (contactIds.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(onboardingProvider.notifier).nextStep();
+      });
+      return const Center(child: CircularProgressIndicator());
+    }
+
     // Only quiz first 3 contacts
-    final quizCount = contactIds.length.clamp(0, 3);
+    final quizCount = contactIds.length.clamp(1, 3);
 
     if (currentIndex >= quizCount) {
       // Quiz complete, move to plant creation
@@ -59,92 +67,94 @@ class _QuizQuestion extends ConsumerWidget {
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  // Progress indicator
-                  LinearProgressIndicator(
-                    value: questionNumber / totalQuestions,
-                    backgroundColor: Colors.grey.shade200,
-                    valueColor: const AlwaysStoppedAnimation(Colors.green),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  Text(
-                    'Question $questionNumber of $totalQuestions',
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-
-                  const Spacer(),
-
-                  // Contact avatar
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: contact?.thumbnail != null
-                        ? MemoryImage(contact!.thumbnail!)
-                        : null,
-                    child: contact?.thumbnail == null
-                        ? Text(
-                            displayName[0].toUpperCase(),
-                            style: const TextStyle(fontSize: 36),
-                          )
-                        : null,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  Text(
-                    displayName,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // Progress indicator
+                    LinearProgressIndicator(
+                      value: questionNumber / totalQuestions,
+                      backgroundColor: Colors.grey.shade200,
+                      valueColor: const AlwaysStoppedAnimation(Colors.green),
                     ),
-                  ),
 
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 16),
 
-                  const Text(
-                    'How often do you want to\nstay in touch?',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
+                    Text(
+                      'Question $questionNumber of $totalQuestions',
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
 
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
-                  // Options
-                  _FrequencyOption(
-                    title: 'Every few days',
-                    subtitle: 'High maintenance plant',
-                    plants: 'Orchid, Fern',
-                    color: Colors.red.shade100,
-                    icon: Icons.local_florist,
-                    onTap: () => _selectDifficulty(ref, 3),
-                  ),
+                    // Contact avatar
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: contact?.thumbnail != null
+                          ? MemoryImage(contact!.thumbnail!)
+                          : null,
+                      child: contact?.thumbnail == null
+                          ? Text(
+                              displayName[0].toUpperCase(),
+                              style: const TextStyle(fontSize: 36),
+                            )
+                          : null,
+                    ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 24),
 
-                  _FrequencyOption(
-                    title: 'Weekly',
-                    subtitle: 'Medium maintenance plant',
-                    plants: 'Monstera, Sunflower',
-                    color: Colors.orange.shade100,
-                    icon: Icons.eco,
-                    onTap: () => _selectDifficulty(ref, 2),
-                  ),
+                    Text(
+                      displayName,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 32),
 
-                  _FrequencyOption(
-                    title: 'Monthly or less',
-                    subtitle: 'Low maintenance plant',
-                    plants: 'Cactus, Snake Plant',
-                    color: Colors.green.shade100,
-                    icon: Icons.grass,
-                    onTap: () => _selectDifficulty(ref, 1),
-                  ),
+                    const Text(
+                      'How often do you want to\nstay in touch?',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
 
-                  const Spacer(),
-                ],
+                    const SizedBox(height: 32),
+
+                    // Options
+                    _FrequencyOption(
+                      title: 'Every few days',
+                      subtitle: 'High maintenance plant',
+                      plants: 'Orchid, Fern',
+                      color: Colors.red.shade100,
+                      icon: Icons.local_florist,
+                      onTap: () => _selectDifficulty(ref, 3),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    _FrequencyOption(
+                      title: 'Weekly',
+                      subtitle: 'Medium maintenance plant',
+                      plants: 'Monstera, Sunflower',
+                      color: Colors.orange.shade100,
+                      icon: Icons.eco,
+                      onTap: () => _selectDifficulty(ref, 2),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    _FrequencyOption(
+                      title: 'Monthly or less',
+                      subtitle: 'Low maintenance plant',
+                      plants: 'Cactus, Snake Plant',
+                      color: Colors.green.shade100,
+                      icon: Icons.grass,
+                      onTap: () => _selectDifficulty(ref, 1),
+                    ),
+
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
           ),

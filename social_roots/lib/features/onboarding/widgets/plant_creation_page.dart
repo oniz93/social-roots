@@ -42,6 +42,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
     final plantRepository = ref.read(plantRepositoryProvider);
 
     final contactIds = state.selectedContactIds.toList();
+    if (!mounted) return;
     setState(() => _totalCount = contactIds.length);
 
     for (int i = 0; i < contactIds.length; i++) {
@@ -49,6 +50,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
 
       // Get contact details
       final contact = await contactService.getContact(contactId);
+      if (!mounted) return;
       if (contact == null) continue;
 
       // Determine difficulty (from quiz or default to 2)
@@ -65,12 +67,14 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
         difficultyLevel: difficulty,
       );
 
+      if (!mounted) return;
       setState(() => _createdCount = i + 1);
 
       // Small delay for animation effect
       await Future.delayed(const Duration(milliseconds: 200));
     }
 
+    if (!mounted) return;
     setState(() => _isComplete = true);
 
     // Mark onboarding complete

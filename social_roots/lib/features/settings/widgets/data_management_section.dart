@@ -11,7 +11,7 @@ import '../../../data/repositories/note_repository.dart';
 
 class DataManagementSection extends ConsumerWidget {
   const DataManagementSection({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -24,14 +24,14 @@ class DataManagementSection extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        
+
         ListTile(
           leading: const Icon(Icons.download),
           title: const Text('Export Data'),
           subtitle: const Text('Export all your data as JSON'),
           onTap: () => _exportData(context, ref),
         ),
-        
+
         ListTile(
           leading: const Icon(Icons.delete_forever, color: Colors.red),
           title: const Text('Delete All Data'),
@@ -41,21 +41,23 @@ class DataManagementSection extends ConsumerWidget {
       ],
     );
   }
-  
+
   Future<void> _exportData(BuildContext context, WidgetRef ref) async {
     try {
       final plantRepo = ref.read(plantRepositoryProvider);
       final interactionRepo = ref.read(interactionRepositoryProvider);
       final noteRepo = ref.read(noteRepositoryProvider);
-      
+
       // Gather all data
       final plants = await plantRepo.getAllPlantsSortedByHealth();
       final exportData = <Map<String, dynamic>>[];
-      
+
       for (final plant in plants) {
-        final interactions = await interactionRepo.getInteractionsForPlant(plant.id);
+        final interactions = await interactionRepo.getInteractionsForPlant(
+          plant.id,
+        );
         final notes = await noteRepo.getNotesForPlant(plant.id);
-        
+
         exportData.add({
           'plant': {
             'id': plant.id,
@@ -67,47 +69,55 @@ class DataManagementSection extends ConsumerWidget {
             'lastWatered': plant.lastWatered.toIso8601String(),
             'isArchived': plant.isArchived,
           },
-          'interactions': interactions.map((i) => {
-            'id': i.id,
-            'type': i.type.name,
-            'timestamp': i.timestamp.toIso8601String(),
-            'summary': i.summary,
-          }).toList(),
-          'notes': notes.map((n) => {
-            'id': n.id,
-            'content': n.content,
-            'tags': n.tags,
-            'createdAt': n.createdAt.toIso8601String(),
-            'reminderDate': n.reminderDate?.toIso8601String(),
-          }).toList(),
+          'interactions': interactions
+              .map(
+                (i) => {
+                  'id': i.id,
+                  'type': i.type.name,
+                  'timestamp': i.timestamp.toIso8601String(),
+                  'summary': i.summary,
+                },
+              )
+              .toList(),
+          'notes': notes
+              .map(
+                (n) => {
+                  'id': n.id,
+                  'content': n.content,
+                  'tags': n.tags,
+                  'createdAt': n.createdAt.toIso8601String(),
+                  'reminderDate': n.reminderDate?.toIso8601String(),
+                },
+              )
+              .toList(),
         });
       }
-      
+
       final jsonString = const JsonEncoder.withIndent('  ').convert({
         'exportDate': DateTime.now().toIso8601String(),
         'version': '1.0',
         'data': exportData,
       });
-      
+
       // Save to temp file
       final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/social_roots_export.json');
       await file.writeAsString(jsonString);
-      
+
       // Share the file
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject: 'Social Roots Data Export',
-      );
+      // ignore: deprecated_member_use
+      await Share.shareXFiles([
+        XFile(file.path),
+      ], subject: 'Social Roots Data Export');
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Export failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Export failed: $e')));
       }
     }
   }
-  
+
   void _showDeleteConfirmation(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
@@ -126,9 +136,9 @@ class DataManagementSection extends ConsumerWidget {
             onPressed: () async {
               Navigator.pop(context);
               // TODO: Implement full data deletion
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('All data deleted')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('All data deleted')));
             },
             child: const Text(
               'Delete Everything',
