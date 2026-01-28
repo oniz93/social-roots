@@ -514,18 +514,18 @@ class ShimmerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final shimmerWidth = size.width * 0.3;
+    final shimmerWidth = size.width * 0.5;
     final shimmerPosition =
-        -shimmerWidth + (size.width + shimmerWidth * 2) * progress;
+        -shimmerWidth + (size.width + shimmerWidth * 1.5) * progress;
 
     final paint = Paint()
       ..shader =
           LinearGradient(
             colors: [
               Colors.transparent,
-              Colors.white.withOpacity(0.1),
-              Colors.white.withOpacity(0.2),
-              Colors.white.withOpacity(0.1),
+              Colors.white.withOpacity(0.05),
+              Colors.white.withOpacity(0.15),
+              Colors.white.withOpacity(0.05),
               Colors.transparent,
             ],
             stops: const [0.0, 0.3, 0.5, 0.7, 1.0],
@@ -533,10 +533,21 @@ class ShimmerPainter extends CustomPainter {
             Rect.fromLTWH(shimmerPosition, 0, shimmerWidth, size.height),
           );
 
+    canvas.save();
+    // Skew the canvas to create a diagonal shimmer
+    canvas.skew(-0.2, 0.0);
+
+    // Draw the rect slightly larger to cover the skew
     canvas.drawRect(
-      Rect.fromLTWH(shimmerPosition, 0, shimmerWidth, size.height),
+      Rect.fromLTWH(
+        shimmerPosition + size.height * 0.1,
+        -10,
+        shimmerWidth,
+        size.height + 20,
+      ),
       paint,
     );
+    canvas.restore();
   }
 
   @override

@@ -134,170 +134,183 @@ class _PlantHeaderState extends State<PlantHeader>
           ),
 
           // Main content
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Calculate sizes based on available height
-                  final availableHeight = constraints.maxHeight;
-                  final isCompact = availableHeight < 320;
-                  final plantSize = isCompact ? 100.0 : 120.0;
-                  final ringSize = isCompact ? 140.0 : 160.0;
-                  final titleFontSize = isCompact ? 20.0 : 24.0;
-                  final topSpace = isCompact ? 32.0 : 40.0;
+          Positioned.fill(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate sizes based on available height
+                    final availableHeight = constraints.maxHeight;
+                    final isCompact = availableHeight < 320;
+                    final plantSize = isCompact ? 100.0 : 120.0;
+                    final ringSize = isCompact ? 140.0 : 160.0;
+                    final titleFontSize = isCompact ? 20.0 : 24.0;
+                    final topSpace = isCompact ? 32.0 : 40.0;
 
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: topSpace), // Space for app bar
-                      // Health ring around plant
-                      AnimatedBuilder(
-                        animation: _pulseController,
-                        builder: (context, child) {
-                          final pulseScale = widget.plant.currentHealth >= 80
-                              ? 1.0 + _pulseController.value * 0.05
-                              : 1.0;
-
-                          return Transform.scale(
-                            scale: pulseScale,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // Glowing health ring
-                                CustomPaint(
-                                  size: Size(ringSize, ringSize),
-                                  painter: HealthRingPainter(
-                                    health: widget.plant.currentHealth,
-                                    healthState: widget.plant.healthState,
-                                    pulseValue: _pulseController.value,
-                                  ),
-                                ),
-                                // Plant
-                                SizedBox(
-                                  width: plantSize,
-                                  height: plantSize,
-                                  child: AnimatedPlaceholderPlant(
-                                    plantType: widget.plant.plantType,
-                                    health: widget.plant.currentHealth,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      // Plant name with shadow
-                      AnimatedBuilder(
-                        animation: _shimmerController,
-                        builder: (context, child) {
-                          return ShaderMask(
-                            shaderCallback: (bounds) => LinearGradient(
-                              colors: [
-                                Colors.white,
-                                Colors.white.withOpacity(0.8),
-                                Colors.white,
-                              ],
-                              stops: [
-                                (_shimmerController.value - 0.3).clamp(0, 1),
-                                _shimmerController.value.clamp(0, 1),
-                                (_shimmerController.value + 0.3).clamp(0, 1),
-                              ],
-                            ).createShader(bounds),
-                            child: Text(
-                              widget.plant.displayName,
-                              style: TextStyle(
-                                fontSize: titleFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                shadows: const [
-                                  Shadow(
-                                    color: Colors.black26,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        },
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      // Plant type badge
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _getPlantTypeIcon(),
-                              size: 12,
-                              color: Colors.white.withOpacity(0.9),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.plant.plantType.displayName,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.white.withOpacity(0.95),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 6),
-
-                      // Stats row
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 6,
-                        runSpacing: 4,
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildStatChip(
-                            icon: Icons.favorite,
-                            label: '${widget.plant.currentHealth.toInt()}%',
-                            color: _getHealthColor(),
+                          SizedBox(height: topSpace), // Space for app bar
+                          // Health ring around plant
+                          AnimatedBuilder(
+                            animation: _pulseController,
+                            builder: (context, child) {
+                              final pulseScale =
+                                  widget.plant.currentHealth >= 80
+                                  ? 1.0 + _pulseController.value * 0.05
+                                  : 1.0;
+
+                              return Transform.scale(
+                                scale: pulseScale,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Glowing health ring
+                                    CustomPaint(
+                                      size: Size(ringSize, ringSize),
+                                      painter: HealthRingPainter(
+                                        health: widget.plant.currentHealth,
+                                        healthState: widget.plant.healthState,
+                                        pulseValue: _pulseController.value,
+                                      ),
+                                    ),
+                                    // Plant
+                                    SizedBox(
+                                      width: plantSize,
+                                      height: plantSize,
+                                      child: AnimatedPlaceholderPlant(
+                                        plantType: widget.plant.plantType,
+                                        health: widget.plant.currentHealth,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                          _buildStatChip(
-                            icon: Icons.calendar_today,
-                            label: DateFormat.MMMd().format(
-                              widget.plant.plantedDate,
-                            ),
-                            color: Colors.white.withOpacity(0.8),
+
+                          const SizedBox(height: 8),
+
+                          // Plant name with shadow
+                          AnimatedBuilder(
+                            animation: _shimmerController,
+                            builder: (context, child) {
+                              return ShaderMask(
+                                shaderCallback: (bounds) => LinearGradient(
+                                  colors: [
+                                    Colors.white,
+                                    Colors.white.withValues(alpha: 0.8),
+                                    Colors.white,
+                                  ],
+                                  stops: [
+                                    (_shimmerController.value - 0.3).clamp(
+                                      0,
+                                      1,
+                                    ),
+                                    _shimmerController.value.clamp(0, 1),
+                                    (_shimmerController.value + 0.3).clamp(
+                                      0,
+                                      1,
+                                    ),
+                                  ],
+                                ).createShader(bounds),
+                                child: Text(
+                                  widget.plant.displayName,
+                                  style: TextStyle(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    shadows: const [
+                                      Shadow(
+                                        color: Colors.black26,
+                                        offset: Offset(0, 2),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            },
                           ),
-                          if (widget.plant.snoozedUntil != null)
-                            _buildStatChip(
-                              icon: Icons.pause_circle_outline,
-                              label: 'Snoozed',
-                              color: Colors.blue.shade200,
+
+                          const SizedBox(height: 4),
+
+                          // Plant type badge
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 3,
                             ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  _getPlantTypeIcon(),
+                                  size: 12,
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget.plant.plantType.displayName,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.white.withValues(alpha: 0.95),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 6),
+
+                          // Stats row
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 6,
+                            runSpacing: 4,
+                            children: [
+                              _buildStatChip(
+                                icon: Icons.favorite,
+                                label: '${widget.plant.currentHealth.toInt()}%',
+                                color: _getHealthColor(),
+                              ),
+                              _buildStatChip(
+                                icon: Icons.calendar_today,
+                                label: DateFormat.MMMd().format(
+                                  widget.plant.plantedDate,
+                                ),
+                                color: Colors.white.withValues(alpha: 0.8),
+                              ),
+                              if (widget.plant.snoozedUntil != null)
+                                _buildStatChip(
+                                  icon: Icons.pause_circle_outline,
+                                  label: 'Snoozed',
+                                  color: Colors.blue.shade200,
+                                ),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -314,7 +327,7 @@ class _PlantHeaderState extends State<PlantHeader>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.15),
+        color: Colors.black.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -437,7 +450,7 @@ class HeaderBackgroundPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Subtle wave pattern at the bottom
     final wavePaint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..style = PaintingStyle.fill;
 
     for (int layer = 0; layer < 3; layer++) {
@@ -461,7 +474,7 @@ class HeaderBackgroundPainter extends CustomPainter {
 
     // Decorative circles in corners
     final circlePaint = Paint()
-      ..color = Colors.white.withOpacity(0.03)
+      ..color = Colors.white.withValues(alpha: 0.03)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(
@@ -533,7 +546,7 @@ class ParticlesPainter extends CustomPainter {
     double opacity,
   ) {
     final paint = Paint()
-      ..color = Colors.yellow.shade100.withOpacity(opacity)
+      ..color = Colors.yellow.shade100.withValues(alpha: opacity)
       ..style = PaintingStyle.fill;
 
     // Four-pointed star
@@ -570,7 +583,7 @@ class ParticlesPainter extends CustomPainter {
     canvas.rotate(rotation);
 
     final paint = Paint()
-      ..color = Colors.green.shade300.withOpacity(opacity)
+      ..color = Colors.green.shade300.withValues(alpha: opacity)
       ..style = PaintingStyle.fill;
 
     final path = Path()
@@ -595,7 +608,7 @@ class ParticlesPainter extends CustomPainter {
     canvas.rotate(rotation);
 
     final paint = Paint()
-      ..color = Colors.red.shade200.withOpacity(opacity)
+      ..color = Colors.red.shade200.withValues(alpha: opacity)
       ..style = PaintingStyle.fill;
 
     final path = Path()
@@ -615,7 +628,7 @@ class ParticlesPainter extends CustomPainter {
     double opacity,
   ) {
     final paint = Paint()
-      ..color = Colors.grey.shade300.withOpacity(opacity)
+      ..color = Colors.grey.shade300.withValues(alpha: opacity)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(Offset(x, y), size * 0.5, paint);
@@ -643,7 +656,7 @@ class HealthRingPainter extends CustomPainter {
 
     // Background ring
     final bgPaint = Paint()
-      ..color = Colors.white.withOpacity(0.15)
+      ..color = Colors.white.withValues(alpha: 0.15)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
@@ -653,7 +666,7 @@ class HealthRingPainter extends CustomPainter {
     // Health arc
     final healthAngle = (health / 100) * math.pi * 2;
     final healthPaint = Paint()
-      ..color = _getHealthColor().withOpacity(0.8 + pulseValue * 0.2)
+      ..color = _getHealthColor().withValues(alpha: 0.8 + pulseValue * 0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
@@ -669,7 +682,7 @@ class HealthRingPainter extends CustomPainter {
     // Glow effect for thriving plants
     if (health >= 80) {
       final glowPaint = Paint()
-        ..color = _getHealthColor().withOpacity(0.3 * pulseValue)
+        ..color = _getHealthColor().withValues(alpha: 0.3 * pulseValue)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 12
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
