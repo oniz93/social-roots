@@ -6,7 +6,9 @@ import '../../../core/services/contact_service.dart';
 import '../providers/onboarding_provider.dart';
 
 class PlantQuiz extends ConsumerWidget {
-  const PlantQuiz({super.key});
+  final VoidCallback? onQuizComplete;
+
+  const PlantQuiz({super.key, this.onQuizComplete});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +19,11 @@ class PlantQuiz extends ConsumerWidget {
     // If no contacts selected, skip quiz entirely
     if (contactIds.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(onboardingProvider.notifier).nextStep();
+        if (onQuizComplete != null) {
+          onQuizComplete!();
+        } else {
+          ref.read(onboardingProvider.notifier).nextStep();
+        }
       });
       return const Center(child: CircularProgressIndicator());
     }
@@ -28,7 +34,11 @@ class PlantQuiz extends ConsumerWidget {
     if (currentIndex >= quizCount) {
       // Quiz complete, move to plant creation
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(onboardingProvider.notifier).nextStep();
+        if (onQuizComplete != null) {
+          onQuizComplete!();
+        } else {
+          ref.read(onboardingProvider.notifier).nextStep();
+        }
       });
       return const Center(child: CircularProgressIndicator());
     }

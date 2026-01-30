@@ -7,7 +7,14 @@ import '../../../data/repositories/plant_repository.dart';
 import '../providers/onboarding_provider.dart';
 
 class PlantCreationPage extends ConsumerStatefulWidget {
-  const PlantCreationPage({super.key});
+  final bool isOnboarding;
+  final VoidCallback? onComplete;
+
+  const PlantCreationPage({
+    super.key,
+    this.isOnboarding = true,
+    this.onComplete,
+  });
 
   @override
   ConsumerState<PlantCreationPage> createState() => _PlantCreationPageState();
@@ -19,6 +26,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
   int _createdCount = 0;
   int _totalCount = 0;
   bool _isComplete = false;
+  String? _error;
 
   @override
   void initState() {
@@ -37,48 +45,60 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
   }
 
   Future<void> _createPlants() async {
-    final state = ref.read(onboardingProvider);
-    final contactService = ref.read(contactServiceProvider);
-    final plantRepository = ref.read(plantRepositoryProvider);
+    try {
+      final state = ref.read(onboardingProvider);
+      final contactService = ref.read(contactServiceProvider);
+      final plantRepository = ref.read(plantRepositoryProvider);
 
-    final contactIds = state.selectedContactIds.toList();
-    if (!mounted) return;
-    setState(() => _totalCount = contactIds.length);
-
-    for (int i = 0; i < contactIds.length; i++) {
-      final contactId = contactIds[i];
-
-      // Get contact details
-      final contact = await contactService.getContact(contactId);
+      final contactIds = state.selectedContactIds.toList();
       if (!mounted) return;
-      if (contact == null) continue;
+      setState(() => _totalCount = contactIds.length);
 
-      // Determine difficulty (from quiz or default to 2)
-      final difficulty = state.contactDifficulties[contactId] ?? 2;
+      for (int i = 0; i < contactIds.length; i++) {
+        final contactId = contactIds[i];
 
-      // Assign plant type based on difficulty
-      final plantType = _getPlantTypeForDifficulty(difficulty);
+        // Get contact details
+        final contact = await contactService.getContact(contactId);
+        if (!mounted) return;
+        if (contact == null) continue;
 
-      // Create the plant
-      await plantRepository.createPlant(
-        contactId: contactId,
-        displayName: contact.displayName,
-        plantType: plantType,
-        difficultyLevel: difficulty,
-      );
+        // Determine difficulty (from quiz or default to 2)
+        final difficulty = state.contactDifficulties[contactId] ?? 2;
+
+        // Assign plant type based on difficulty
+        final plantType = _getPlantTypeForDifficulty(difficulty);
+
+        // Create the plant
+        await plantRepository.createPlant(
+          contactId: contactId,
+          displayName: contact.displayName,
+          plantType: plantType,
+          difficultyLevel: difficulty,
+        );
+
+        if (!mounted) return;
+        setState(() => _createdCount = i + 1);
+
+        // Small delay for animation effect
+        await Future.delayed(const Duration(milliseconds: 200));
+      }
 
       if (!mounted) return;
-      setState(() => _createdCount = i + 1);
+      setState(() => _isComplete = true);
 
-      // Small delay for animation effect
-      await Future.delayed(const Duration(milliseconds: 200));
+      // Only mark onboarding complete if we are in onboarding flow
+      if (widget.isOnboarding) {
+        await ref.read(onboardingProvider.notifier).completeOnboarding();
+      }
+    } catch (e, stack) {
+      debugPrint('Error creating plants: $e\n$stack');
+      if (mounted) {
+        setState(() {
+          _error = 'Failed to create garden: $e';
+          _isComplete = true; // Allow exit
+        });
+      }
     }
-
-    if (!mounted) return;
-    setState(() => _isComplete = true);
-
-    // Mark onboarding complete
-    await ref.read(onboardingProvider.notifier).completeOnboarding();
   }
 
   PlantType _getPlantTypeForDifficulty(int difficulty) {
@@ -105,6 +125,18 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
         return hardPlants[DateTime.now().millisecond % hardPlants.length];
       default:
         return PlantType.monstera;
+    }
+  }
+
+  void _handleComplete() {
+    if (widget.onComplete != null) {
+      widget.onComplete!();
+    } else {
+      if (widget.isOnboarding) {
+        Navigator.of(context).pushReplacementNamed('/garden');
+      } else {
+        Navigator.of(context).pop(); // Go back to garden
+      }
     }
   }
 
@@ -143,9 +175,9 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                 ),
                 child: _isComplete
                     ? Icon(
-                        Icons.check_circle,
+                        _error != null ? Icons.error_outline : Icons.check_circle,
                         size: 80,
-                        color: Colors.green.shade600,
+                        color: _error != null ? Colors.red : Colors.green.shade600,
                       )
                     : Stack(
                         alignment: Alignment.center,
@@ -172,9 +204,11 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
 
               // Status text
               Text(
-                _isComplete
-                    ? 'Your Garden is Ready!'
-                    : 'Planting Your Garden...',
+                _error != null
+                    ? 'Something went wrong'
+                    : (_isComplete
+                        ? (widget.isOnboarding ? 'Your Garden is Ready!' : 'Plants Added!')
+                        : 'Planting Your Garden...'),
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -183,27 +217,36 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                 textAlign: TextAlign.center,
               ),
 
+              if (_error != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
               const SizedBox(height: 16),
 
               // Progress count
-              Text(
-                _isComplete
-                    ? '$_totalCount plants created'
-                    : '$_createdCount of $_totalCount',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white.withOpacity(0.9),
+              if (_error == null)
+                Text(
+                  _isComplete
+                      ? '$_totalCount plants created'
+                      : '$_createdCount of $_totalCount',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
                 ),
-              ),
 
               const Spacer(),
 
               // Continue button
               if (_isComplete)
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/garden');
-                  },
+                  onPressed: _handleComplete,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.green.shade600,
@@ -212,9 +255,9 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                       borderRadius: BorderRadius.circular(28),
                     ),
                   ),
-                  child: const Text(
-                    'Enter Your Garden',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Text(
+                    widget.isOnboarding ? 'Enter Your Garden' : 'Back to Garden',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
 

@@ -221,53 +221,17 @@ class _ContactSelectionScreenState
   ) async {
     final selectedIds = ref.read(selectedContactsProvider);
 
+    // Update state with selected contacts (resets quiz index)
+    ref.read(onboardingProvider.notifier).setSelectedContacts(selectedIds);
+
     if (widget.isOnboarding) {
-      // Update onboarding state and proceed to quiz
-      ref.read(onboardingProvider.notifier).setSelectedContacts(selectedIds);
+      // Proceed to next step in onboarding flow
       ref.read(onboardingProvider.notifier).nextStep();
-      return;
-    }
-
-    // Standalone mode: Create plants immediately
-    setState(() => _isProcessing = true);
-    final repository = ref.read(plantRepositoryProvider);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
-
-    try {
-      for (final id in selectedIds) {
-        final contact = allContacts.firstWhere(
-          (c) => c.id == id,
-          orElse: () => Contact(id: id, displayName: 'Unknown'),
-        );
-
-        await repository.createPlant(
-          contactId: contact.id,
-          displayName: contact.displayName,
-          plantType: PlantType.succulent,
-          difficultyLevel: 1,
-          photoUrl: null, // TODO: Handle photo persistence
-        );
-      }
-
-      if (mounted) {
-        // Clear selection
-        ref.read(selectedContactsProvider.notifier).state = {};
-
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(content: Text('Garden updated successfully!')),
-        );
-
-        // Return to previous screen (Garden)
-        navigator.pop();
-      }
-    } catch (e) {
-      if (mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(content: Text('Error creating garden: $e')),
-        );
-        setState(() => _isProcessing = false);
-      }
+    } else {
+      // Standalone mode: Navigate to Quiz Screen
+      // Clear selection local state as we've passed it to provider
+      ref.read(selectedContactsProvider.notifier).state = {};
+      Navigator.of(context).pushNamed('/plant-quiz');
     }
   }
 }
