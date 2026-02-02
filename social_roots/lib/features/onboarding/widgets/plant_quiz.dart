@@ -12,6 +12,24 @@ class PlantQuiz extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(onboardingProvider, (previous, next) {
+      final contactIds = next.selectedContactIds.toList();
+      if (contactIds.isEmpty) return;
+
+      final quizCount = contactIds.length;
+      final prevIndex = previous?.quizContactIndex ?? 0;
+      final nextIndex = next.quizContactIndex;
+
+      // Trigger navigation only when we transition to completion
+      if (prevIndex < quizCount && nextIndex >= quizCount) {
+        if (onQuizComplete != null) {
+          onQuizComplete!();
+        } else {
+          ref.read(onboardingProvider.notifier).nextStep();
+        }
+      }
+    });
+
     final state = ref.watch(onboardingProvider);
     final contactIds = state.selectedContactIds.toList();
     final currentIndex = state.quizContactIndex;
@@ -28,18 +46,11 @@ class PlantQuiz extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // Only quiz first 3 contacts
-    final quizCount = contactIds.length.clamp(1, 3);
+    // Quiz all selected contacts
+    final quizCount = contactIds.length;
 
     if (currentIndex >= quizCount) {
-      // Quiz complete, move to plant creation
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (onQuizComplete != null) {
-          onQuizComplete!();
-        } else {
-          ref.read(onboardingProvider.notifier).nextStep();
-        }
-      });
+      // Quiz complete, show loading while navigating
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -73,7 +84,7 @@ class _QuizQuestion extends ConsumerWidget {
         final displayName = contact?.displayName ?? 'This Person';
 
         return Container(
-          color: Colors.white,
+          color: const Color(0xFF1A1A1A),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -83,7 +94,7 @@ class _QuizQuestion extends ConsumerWidget {
                     // Progress indicator
                     LinearProgressIndicator(
                       value: questionNumber / totalQuestions,
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: Colors.white.withOpacity(0.1),
                       valueColor: const AlwaysStoppedAnimation(Colors.green),
                     ),
 
@@ -91,7 +102,7 @@ class _QuizQuestion extends ConsumerWidget {
 
                     Text(
                       'Question $questionNumber of $totalQuestions',
-                      style: TextStyle(color: Colors.grey.shade600),
+                      style: TextStyle(color: Colors.grey.shade500),
                     ),
 
                     const SizedBox(height: 32),
@@ -99,13 +110,14 @@ class _QuizQuestion extends ConsumerWidget {
                     // Contact avatar
                     CircleAvatar(
                       radius: 50,
+                      backgroundColor: Colors.green.shade800,
                       backgroundImage: contact?.thumbnail != null
                           ? MemoryImage(contact!.thumbnail!)
                           : null,
                       child: contact?.thumbnail == null
                           ? Text(
                               displayName[0].toUpperCase(),
-                              style: const TextStyle(fontSize: 36),
+                              style: const TextStyle(fontSize: 36, color: Colors.white),
                             )
                           : null,
                     ),
@@ -117,6 +129,7 @@ class _QuizQuestion extends ConsumerWidget {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
 
@@ -124,7 +137,7 @@ class _QuizQuestion extends ConsumerWidget {
 
                     const Text(
                       'How often do you want to\nstay in touch?',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
 
@@ -135,8 +148,9 @@ class _QuizQuestion extends ConsumerWidget {
                       title: 'Every few days',
                       subtitle: 'High maintenance plant',
                       plants: 'Orchid, Fern',
-                      color: Colors.red.shade100,
+                      color: Colors.red.withOpacity(0.15),
                       icon: Icons.local_florist,
+                      iconColor: Colors.red.shade300,
                       onTap: () => _selectDifficulty(ref, 3),
                     ),
 
@@ -146,8 +160,9 @@ class _QuizQuestion extends ConsumerWidget {
                       title: 'Weekly',
                       subtitle: 'Medium maintenance plant',
                       plants: 'Monstera, Sunflower',
-                      color: Colors.orange.shade100,
+                      color: Colors.orange.withOpacity(0.15),
                       icon: Icons.eco,
+                      iconColor: Colors.orange.shade300,
                       onTap: () => _selectDifficulty(ref, 2),
                     ),
 
@@ -157,8 +172,9 @@ class _QuizQuestion extends ConsumerWidget {
                       title: 'Monthly or less',
                       subtitle: 'Low maintenance plant',
                       plants: 'Cactus, Snake Plant',
-                      color: Colors.green.shade100,
+                      color: Colors.green.withOpacity(0.15),
                       icon: Icons.grass,
+                      iconColor: Colors.green.shade300,
                       onTap: () => _selectDifficulty(ref, 1),
                     ),
 
@@ -185,6 +201,7 @@ class _FrequencyOption extends StatelessWidget {
   final String subtitle;
   final String plants;
   final Color color;
+  final Color iconColor;
   final IconData icon;
   final VoidCallback onTap;
 
@@ -193,6 +210,7 @@ class _FrequencyOption extends StatelessWidget {
     required this.subtitle,
     required this.plants,
     required this.color,
+    required this.iconColor,
     required this.icon,
     required this.onTap,
   });
@@ -207,11 +225,11 @@ class _FrequencyOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 40),
+            Icon(icon, size: 40, color: iconColor),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -222,11 +240,12 @@ class _FrequencyOption extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
                   ),
                   Text(
                     plants,
@@ -239,7 +258,7 @@ class _FrequencyOption extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right),
+            const Icon(Icons.chevron_right, color: Colors.white54),
           ],
         ),
       ),

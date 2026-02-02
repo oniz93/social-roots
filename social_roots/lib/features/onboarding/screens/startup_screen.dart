@@ -36,7 +36,8 @@ class _StartupScreenState extends ConsumerState<StartupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
+      backgroundColor: Color(0xFF1A1A1A),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,10 +45,10 @@ class _StartupScreenState extends ConsumerState<StartupScreen> {
              Icon(
               Icons.eco,
               size: 80,
-              color: Colors.green.shade600,
+              color: Colors.green,
             ),
             const SizedBox(height: 24),
-            const CircularProgressIndicator(),
+            const CircularProgressIndicator(color: Colors.green),
           ],
         ),
       ),

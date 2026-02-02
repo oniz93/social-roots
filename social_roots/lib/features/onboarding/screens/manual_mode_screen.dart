@@ -40,13 +40,20 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
     final manualContacts = ref.watch(manualContactsProvider);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1A1A1A),
+        foregroundColor: Colors.white,
+        elevation: 0,
         title: const Text('Add Contacts Manually'),
         actions: [
           if (manualContacts.isNotEmpty)
             TextButton(
               onPressed: () => _proceedToQuiz(context),
-              child: Text('Next (${manualContacts.length})'),
+              child: Text(
+                'Next (${manualContacts.length})',
+                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              ),
             ),
         ],
       ),
@@ -61,9 +68,20 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                 children: [
                   TextFormField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
                       labelText: 'Name *',
-                      border: OutlineInputBorder(),
+                      labelStyle: const TextStyle(color: Colors.white70),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -75,18 +93,40 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _phoneController,
-                    decoration: const InputDecoration(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
                       labelText: 'Phone (optional)',
-                      border: OutlineInputBorder(),
+                      labelStyle: const TextStyle(color: Colors.white70),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      ),
                     ),
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
                       labelText: 'Email (optional)',
-                      border: OutlineInputBorder(),
+                      labelStyle: const TextStyle(color: Colors.white70),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      ),
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -97,6 +137,8 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                     label: const Text('Add Contact'),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 48),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
                     ),
                   ),
                 ],
@@ -104,7 +146,7 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
             ),
           ),
 
-          const Divider(),
+          const Divider(color: Colors.white10),
 
           // Added contacts list
           Expanded(
@@ -121,16 +163,21 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       final contact = manualContacts[index];
                       return ListTile(
                         leading: CircleAvatar(
+                          backgroundColor: Colors.green.withOpacity(0.2),
                           child: Text(
                             contact.name.isNotEmpty
                                 ? contact.name[0].toUpperCase()
                                 : '?',
+                            style: const TextStyle(color: Colors.green),
                           ),
                         ),
-                        title: Text(contact.name),
-                        subtitle: Text(contact.phone ?? contact.email ?? ''),
+                        title: Text(contact.name, style: const TextStyle(color: Colors.white)),
+                        subtitle: Text(
+                          contact.phone ?? contact.email ?? '',
+                          style: const TextStyle(color: Colors.white54),
+                        ),
                         trailing: IconButton(
-                          icon: const Icon(Icons.delete),
+                          icon: const Icon(Icons.delete, color: Colors.white54),
                           onPressed: () => _removeContact(contact.id),
                         ),
                       );
@@ -142,8 +189,12 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
       floatingActionButton: manualContacts.isNotEmpty
           ? FloatingActionButton.extended(
               onPressed: () => _proceedToQuiz(context),
-              icon: const Icon(Icons.arrow_forward),
-              label: Text('Continue with ${manualContacts.length}'),
+              icon: const Icon(Icons.arrow_forward, color: Colors.white),
+              backgroundColor: Colors.green,
+              label: Text(
+                'Continue with ${manualContacts.length}',
+                style: const TextStyle(color: Colors.white),
+              ),
             )
           : null,
     );

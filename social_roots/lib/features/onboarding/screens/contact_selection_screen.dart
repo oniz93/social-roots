@@ -39,7 +39,11 @@ class _ContactSelectionScreenState
     final selectedContacts = ref.watch(selectedContactsProvider);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1A1A1A),
+        foregroundColor: Colors.white,
+        elevation: 0,
         title: const Text('Select Your Core Circle'),
         actions: [
           if (_isProcessing)
@@ -48,7 +52,7 @@ class _ContactSelectionScreenState
               child: SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
+                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.green),
               ),
             )
           else if (selectedContacts.isNotEmpty)
@@ -59,12 +63,13 @@ class _ContactSelectionScreenState
                 widget.isOnboarding
                     ? 'Next (${selectedContacts.length})'
                     : 'Finish (${selectedContacts.length})',
+                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
               ),
             )
           else
             TextButton(
               onPressed: () => _createGardenAndProceed(context, []),
-              child: const Text('Skip'),
+              child: const Text('Skip', style: TextStyle(color: Colors.white70)),
             ),
         ],
       ),
@@ -75,15 +80,24 @@ class _ContactSelectionScreenState
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               controller: _searchController,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Search contacts...',
-                prefixIcon: const Icon(Icons.search),
+                hintStyle: const TextStyle(color: Colors.white54),
+                prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
                 ),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear),
+                        icon: const Icon(Icons.clear, color: Colors.white54),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _searchQuery = '');
@@ -102,7 +116,7 @@ class _ContactSelectionScreenState
               'Select the people you want to stay connected with. You can add more later.',
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade400),
             ),
           ),
 
@@ -129,6 +143,7 @@ class _ContactSelectionScreenState
                           _searchQuery.isEmpty
                               ? 'No new contacts found'
                               : 'No contacts match "$_searchQuery"',
+                          style: const TextStyle(color: Colors.white54),
                         ),
                       );
                     }
@@ -150,14 +165,14 @@ class _ContactSelectionScreenState
                     );
                   },
                   loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator(color: Colors.green)),
                   error: (_, __) =>
-                      const Center(child: Text('Error loading garden data')),
+                      const Center(child: Text('Error loading garden data', style: TextStyle(color: Colors.red))),
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator(color: Colors.green)),
               error: (e, _) =>
-                  Center(child: Text('Error loading contacts: $e')),
+                  Center(child: Text('Error loading contacts: $e', style: const TextStyle(color: Colors.red))),
             ),
           ),
         ],
@@ -170,13 +185,15 @@ class _ContactSelectionScreenState
                       context,
                       contactsAsync.value ?? [],
                     ),
-              icon: const Icon(Icons.check),
+              icon: const Icon(Icons.check, color: Colors.white),
+              backgroundColor: Colors.green,
               label: Text(
                 _isProcessing
                     ? 'Processing...'
                     : (widget.isOnboarding
                           ? 'Next (${selectedContacts.length})'
                           : 'Create Garden (${selectedContacts.length})'),
+                style: const TextStyle(color: Colors.white),
               ),
             )
           : null,
@@ -251,6 +268,7 @@ class _ContactListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
+        backgroundColor: Colors.green.withOpacity(0.2),
         backgroundImage: contact.thumbnail != null
             ? MemoryImage(contact.thumbnail!)
             : null,
@@ -259,17 +277,19 @@ class _ContactListItem extends StatelessWidget {
                 contact.displayName.isNotEmpty
                     ? contact.displayName[0].toUpperCase()
                     : '?',
+                style: const TextStyle(color: Colors.green),
               )
             : null,
       ),
-      title: Text(contact.displayName),
+      title: Text(contact.displayName, style: const TextStyle(color: Colors.white)),
       subtitle: contact.phones.isNotEmpty
-          ? Text(contact.phones.first.number)
+          ? Text(contact.phones.first.number, style: const TextStyle(color: Colors.white54))
           : null,
       trailing: Checkbox(
         value: isSelected,
         onChanged: (_) => onTap(),
         activeColor: Colors.green,
+        side: const BorderSide(color: Colors.white54),
       ),
       onTap: onTap,
     );

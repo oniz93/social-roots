@@ -15,6 +15,7 @@ class Interaction {
   late InteractionType type;
 
   String? summary; // Optional user notes about the interaction
+  String? photoPath; // Path to attached photo of the memory
 
   // For linking to specific notes if relevant
   int? linkedNoteId;

@@ -17,6 +17,7 @@ class InteractionRepository {
     required int plantId,
     required InteractionType type,
     String? summary,
+    String? photoPath,
     int? linkedNoteId,
   }) async {
     late Interaction interaction;
@@ -28,6 +29,7 @@ class InteractionRepository {
         ..timestamp = DateTime.now()
         ..type = type
         ..summary = summary
+        ..photoPath = photoPath
         ..linkedNoteId = linkedNoteId;
       
       await _isar.interactions.put(interaction);

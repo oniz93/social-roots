@@ -53,14 +53,14 @@ class NotificationService {
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
 
-    // Request permissions on iOS
-    await _requestPermissions();
+    // Request permissions later in the UI flow
+    // await requestPermissions();
 
     // Create notification channels (Android)
     await _createNotificationChannels();
   }
 
-  Future<void> _requestPermissions() async {
+  Future<void> requestPermissions() async {
     await _plugin
         .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin

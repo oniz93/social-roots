@@ -102,9 +102,9 @@ class WaterButton extends ConsumerWidget {
         ),
         child: InteractionSummaryInput(
           onCancel: () => Navigator.pop(context),
-          onSubmit: (summary) {
+          onSubmit: (summary, photoPath) {
             Navigator.pop(context);
-            _performWatering(context, ref, type, summary);
+            _performWatering(context, ref, type, summary, photoPath);
           },
         ),
       ),
@@ -116,6 +116,7 @@ class WaterButton extends ConsumerWidget {
     WidgetRef ref,
     InteractionType type,
     String? summary,
+    String? photoPath,
   ) async {
     // Show animation overlay
     showDialog(
@@ -134,6 +135,7 @@ class WaterButton extends ConsumerWidget {
       plant: plant,
       type: type,
       summary: summary,
+      photoPath: photoPath,
     );
     
     // Show result

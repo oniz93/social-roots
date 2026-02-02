@@ -22,23 +22,28 @@ const InteractionSchema = CollectionSchema(
       name: r'linkedNoteId',
       type: IsarType.long,
     ),
-    r'plantId': PropertySchema(
+    r'photoPath': PropertySchema(
       id: 1,
+      name: r'photoPath',
+      type: IsarType.string,
+    ),
+    r'plantId': PropertySchema(
+      id: 2,
       name: r'plantId',
       type: IsarType.long,
     ),
     r'summary': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'summary',
       type: IsarType.string,
     ),
     r'timestamp': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'timestamp',
       type: IsarType.dateTime,
     ),
     r'type': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'type',
       type: IsarType.string,
       enumMap: _InteractiontypeEnumValueMap,
@@ -79,6 +84,12 @@ int _interactionEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.photoPath;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.summary;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -95,10 +106,11 @@ void _interactionSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.linkedNoteId);
-  writer.writeLong(offsets[1], object.plantId);
-  writer.writeString(offsets[2], object.summary);
-  writer.writeDateTime(offsets[3], object.timestamp);
-  writer.writeString(offsets[4], object.type.name);
+  writer.writeString(offsets[1], object.photoPath);
+  writer.writeLong(offsets[2], object.plantId);
+  writer.writeString(offsets[3], object.summary);
+  writer.writeDateTime(offsets[4], object.timestamp);
+  writer.writeString(offsets[5], object.type.name);
 }
 
 Interaction _interactionDeserialize(
@@ -110,11 +122,12 @@ Interaction _interactionDeserialize(
   final object = Interaction();
   object.id = id;
   object.linkedNoteId = reader.readLongOrNull(offsets[0]);
-  object.plantId = reader.readLong(offsets[1]);
-  object.summary = reader.readStringOrNull(offsets[2]);
-  object.timestamp = reader.readDateTime(offsets[3]);
+  object.photoPath = reader.readStringOrNull(offsets[1]);
+  object.plantId = reader.readLong(offsets[2]);
+  object.summary = reader.readStringOrNull(offsets[3]);
+  object.timestamp = reader.readDateTime(offsets[4]);
   object.type =
-      _InteractiontypeValueEnumMap[reader.readStringOrNull(offsets[4])] ??
+      _InteractiontypeValueEnumMap[reader.readStringOrNull(offsets[5])] ??
           InteractionType.quickText;
   return object;
 }
@@ -129,12 +142,14 @@ P _interactionDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readLong(offset)) as P;
-    case 2:
       return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readLong(offset)) as P;
     case 3:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
+      return (reader.readDateTime(offset)) as P;
+    case 5:
       return (_InteractiontypeValueEnumMap[reader.readStringOrNull(offset)] ??
           InteractionType.quickText) as P;
     default:
@@ -467,6 +482,160 @@ extension InteractionQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'photoPath',
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'photoPath',
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'photoPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'photoPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'photoPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'photoPath',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'photoPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'photoPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'photoPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'photoPath',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'photoPath',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterFilterCondition>
+      photoPathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'photoPath',
+        value: '',
       ));
     });
   }
@@ -886,6 +1055,18 @@ extension InteractionQuerySortBy
     });
   }
 
+  QueryBuilder<Interaction, Interaction, QAfterSortBy> sortByPhotoPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'photoPath', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterSortBy> sortByPhotoPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'photoPath', Sort.desc);
+    });
+  }
+
   QueryBuilder<Interaction, Interaction, QAfterSortBy> sortByPlantId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'plantId', Sort.asc);
@@ -962,6 +1143,18 @@ extension InteractionQuerySortThenBy
     });
   }
 
+  QueryBuilder<Interaction, Interaction, QAfterSortBy> thenByPhotoPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'photoPath', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Interaction, Interaction, QAfterSortBy> thenByPhotoPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'photoPath', Sort.desc);
+    });
+  }
+
   QueryBuilder<Interaction, Interaction, QAfterSortBy> thenByPlantId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'plantId', Sort.asc);
@@ -1019,6 +1212,13 @@ extension InteractionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Interaction, Interaction, QDistinct> distinctByPhotoPath(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'photoPath', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Interaction, Interaction, QDistinct> distinctByPlantId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'plantId');
@@ -1057,6 +1257,12 @@ extension InteractionQueryProperty
   QueryBuilder<Interaction, int?, QQueryOperations> linkedNoteIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkedNoteId');
+    });
+  }
+
+  QueryBuilder<Interaction, String?, QQueryOperations> photoPathProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'photoPath');
     });
   }
 

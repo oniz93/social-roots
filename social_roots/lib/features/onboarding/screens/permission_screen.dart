@@ -24,6 +24,7 @@ class PermissionScreen extends ConsumerWidget {
     final permissionStatus = ref.watch(contactPermissionProvider);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF1A1A1A),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -37,13 +38,13 @@ class PermissionScreen extends ConsumerWidget {
                     height: 200,
                     width: 200,
                     decoration: BoxDecoration(
-                      color: Colors.green.shade100,
+                      color: Colors.green.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.local_florist,
                       size: 100,
-                      color: Colors.green.shade700,
+                      color: Colors.green.shade400,
                     ),
                   ),
 
@@ -53,6 +54,7 @@ class PermissionScreen extends ConsumerWidget {
                     'Plant Your First Seeds',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -61,7 +63,9 @@ class PermissionScreen extends ConsumerWidget {
 
                   Text(
                     'Social Roots needs access to your contacts to create your digital garden. Each contact becomes a unique plant that you\'ll nurture.',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.grey.shade400,
+                    ),
                     textAlign: TextAlign.center,
                   ),
 
@@ -71,18 +75,18 @@ class PermissionScreen extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
+                      color: Colors.blue.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.blue.shade200),
+                      border: Border.all(color: Colors.blue.withOpacity(0.3)),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.shield, color: Colors.blue.shade700),
+                        Icon(Icons.shield, color: Colors.blue.shade300),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Your contacts stay on your device. We never upload or sell your data.',
-                            style: TextStyle(color: Colors.blue.shade700),
+                            style: TextStyle(color: Colors.blue.shade200),
                           ),
                         ),
                       ],
@@ -98,7 +102,10 @@ class PermissionScreen extends ConsumerWidget {
 
                   TextButton(
                     onPressed: () => _enterManualMode(context),
-                    child: const Text('Or enter contacts manually'),
+                    child: const Text(
+                      'Or enter contacts manually',
+                      style: TextStyle(color: Colors.white70),
+                    ),
                   ),
                 ],
               ),

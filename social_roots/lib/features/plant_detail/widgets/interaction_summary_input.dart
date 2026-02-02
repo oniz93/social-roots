@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class InteractionSummaryInput extends StatefulWidget {
-  final Function(String?) onSubmit;
+  final Function(String?, String?) onSubmit;
   final VoidCallback onCancel;
   
   const InteractionSummaryInput({
@@ -16,11 +18,28 @@ class InteractionSummaryInput extends StatefulWidget {
 
 class _InteractionSummaryInputState extends State<InteractionSummaryInput> {
   final _controller = TextEditingController();
+  String? _pickedImagePath;
+  final ImagePicker _picker = ImagePicker();
   
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _pickedImagePath = image.path;
+      });
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _pickedImagePath = null;
+    });
   }
   
   @override
@@ -58,18 +77,57 @@ class _InteractionSummaryInputState extends State<InteractionSummaryInput> {
             maxLines: 3,
             textCapitalization: TextCapitalization.sentences,
           ),
+          const SizedBox(height: 12),
+          
+          if (_pickedImagePath != null)
+             Stack(
+               children: [
+                 ClipRRect(
+                   borderRadius: BorderRadius.circular(8),
+                   child: Image.file(
+                     File(_pickedImagePath!),
+                     height: 100,
+                     width: 100,
+                     fit: BoxFit.cover,
+                   ),
+                 ),
+                 Positioned(
+                   top: 4,
+                   right: 4,
+                   child: GestureDetector(
+                     onTap: _removeImage,
+                     child: Container(
+                       padding: const EdgeInsets.all(4),
+                       decoration: const BoxDecoration(
+                         color: Colors.black54,
+                         shape: BoxShape.circle,
+                       ),
+                       child: const Icon(Icons.close, color: Colors.white, size: 16),
+                     ),
+                   ),
+                 ),
+               ],
+             )
+          else
+            TextButton.icon(
+              onPressed: _pickImage,
+              icon: const Icon(Icons.photo_camera),
+              label: const Text('Add Photo Memory'),
+            ),
+
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: () => widget.onSubmit(null),
+                onPressed: () => widget.onSubmit(null, null),
                 child: const Text('Skip'),
               ),
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () => widget.onSubmit(
                   _controller.text.isEmpty ? null : _controller.text,
+                  _pickedImagePath,
                 ),
                 child: const Text('Save'),
               ),

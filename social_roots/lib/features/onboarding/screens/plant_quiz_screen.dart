@@ -8,7 +8,12 @@ class PlantQuizScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Customize Your Plants')),
+      backgroundColor: const Color(0xFF1A1A1A),
+      appBar: AppBar(
+        title: const Text('Customize Your Plants'),
+        backgroundColor: const Color(0xFF1A1A1A),
+        foregroundColor: Colors.white,
+      ),
       body: PlantQuiz(
         onQuizComplete: () {
           // Navigate to plant creation page in standalone mode

@@ -40,7 +40,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: const Color(0xFF1A1A1A),
       child: SafeArea(
         child: Column(
           children: [
@@ -51,7 +51,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                 onPressed: () {
                   ref.read(onboardingProvider.notifier).nextStep();
                 },
-                child: const Text('Skip'),
+                child: const Text('Skip', style: TextStyle(color: Colors.white70)),
               ),
             ),
             
@@ -74,13 +74,13 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            color: Colors.green.shade100,
+                            color: Colors.green.withOpacity(0.15),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             concept.icon,
                             size: 60,
-                            color: Colors.green.shade600,
+                            color: Colors.green.shade400,
                           ),
                         ),
                         const SizedBox(height: 48),
@@ -89,6 +89,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -97,7 +98,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                           concept.description,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.grey.shade600,
+                            color: Colors.grey.shade400,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -119,7 +120,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                   decoration: BoxDecoration(
                     color: _currentPage == index 
                         ? Colors.green 
-                        : Colors.grey.shade300,
+                        : Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 );
@@ -145,9 +146,11 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
                   backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
                 ),
                 child: Text(
                   _currentPage < _concepts.length - 1 ? 'Next' : 'Continue',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),

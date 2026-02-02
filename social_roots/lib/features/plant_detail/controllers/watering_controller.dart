@@ -48,6 +48,7 @@ class WateringController extends StateNotifier<WateringState> {
     required Plant plant,
     required InteractionType type,
     String? summary,
+    String? photoPath,
   }) async {
     state = WateringState.watering;
     
@@ -62,6 +63,7 @@ class WateringController extends StateNotifier<WateringState> {
       plantId: plant.id,
       type: type,
       summary: summary,
+      photoPath: photoPath,
     );
     
     // Refresh plant data
