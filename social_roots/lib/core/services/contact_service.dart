@@ -11,6 +11,13 @@ enum ContactPermissionStatus {
 }
 
 class ContactService {
+  /// Local cache for manually added contacts
+  final Map<String, Contact> _manualContacts = {};
+
+  void addManualContact(Contact contact) {
+    _manualContacts[contact.id] = contact;
+  }
+
   /// Check current permission status
   Future<ContactPermissionStatus> checkPermission() async {
     final status = await Permission.contacts.status;
@@ -67,6 +74,10 @@ class ContactService {
 
   /// Get a specific contact by ID
   Future<Contact?> getContact(String id) async {
+    if (_manualContacts.containsKey(id)) {
+      return _manualContacts[id];
+    }
+
     try {
       return await FlutterContacts.getContact(
         id,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../core/services/contact_service.dart';
+import '../providers/onboarding_provider.dart';
 
 // Manual contacts state
 final manualContactsProvider = StateProvider<List<ManualContact>>((ref) => []);
@@ -52,7 +56,10 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
               onPressed: () => _proceedToQuiz(context),
               child: Text(
                 'Next (${manualContacts.length})',
-                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
         ],
@@ -76,11 +83,15 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       fillColor: Colors.white.withOpacity(0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -101,11 +112,15 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       fillColor: Colors.white.withOpacity(0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                     ),
                     keyboardType: TextInputType.phone,
@@ -121,11 +136,15 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       fillColor: Colors.white.withOpacity(0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        borderSide: BorderSide(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -171,7 +190,10 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                             style: const TextStyle(color: Colors.green),
                           ),
                         ),
-                        title: Text(contact.name, style: const TextStyle(color: Colors.white)),
+                        title: Text(
+                          contact.name,
+                          style: const TextStyle(color: Colors.white),
+                        ),
                         subtitle: Text(
                           contact.phone ?? contact.email ?? '',
                           style: const TextStyle(color: Colors.white54),
@@ -230,6 +252,25 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
   }
 
   void _proceedToQuiz(BuildContext context) {
+    final manualContacts = ref.read(manualContactsProvider);
+    final contactService = ref.read(contactServiceProvider);
+
+    // Register manual contacts and collect their IDs
+    final selectedIds = <String>{};
+    for (final mc in manualContacts) {
+      final contact = Contact(
+        id: mc.id,
+        displayName: mc.name,
+        phones: mc.phone != null ? [Phone(mc.phone!)] : [],
+        emails: mc.email != null ? [Email(mc.email!)] : [],
+      );
+      contactService.addManualContact(contact);
+      selectedIds.add(mc.id);
+    }
+
+    // Set the selected contacts in the onboarding provider
+    ref.read(onboardingProvider.notifier).setSelectedContacts(selectedIds);
+
     Navigator.of(context).pushNamed('/plant-quiz');
   }
 }
