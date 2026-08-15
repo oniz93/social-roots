@@ -24,7 +24,7 @@ dependencies:
   permission_handler: ^12.0.1
   
   # Animation
-  rive: ^0.12.4
+  rive: ^0.13.20
   
   # UI/UX
   audioplayers: ^5.2.1
