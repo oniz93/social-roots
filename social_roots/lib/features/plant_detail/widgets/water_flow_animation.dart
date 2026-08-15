@@ -79,13 +79,13 @@ class _WaterFlowAnimationState extends State<WaterFlowAnimation>
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.3),
+                  color: Colors.blue.withValues(alpha: 0.3),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  _getIcon(),
-                  size: 40,
-                  color: Colors.blue,
+                child: Image.asset(
+                  widget.type.icon,
+                  width: 40,
+                  height: 40,
                 ),
               ),
             ),
@@ -99,16 +99,6 @@ class _WaterFlowAnimationState extends State<WaterFlowAnimation>
     );
   }
   
-  IconData _getIcon() {
-    switch (widget.type) {
-      case InteractionType.quickText:
-        return Icons.water_drop;
-      case InteractionType.phoneCall:
-        return Icons.local_cafe;
-      case InteractionType.meetup:
-        return Icons.celebration;
-    }
-  }
   
   List<Widget> _buildWaterDrops() {
     final dropCount = widget.type == InteractionType.meetup ? 8 : 4;

@@ -60,10 +60,11 @@ class _InteractionTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: _getTypeColor(interaction.type).withOpacity(0.2),
-          child: Icon(
-            _getTypeIcon(interaction.type),
-            color: _getTypeColor(interaction.type),
+          backgroundColor: _getTypeColor(interaction.type).withValues(alpha: 0.2),
+          child: Image.asset(
+            interaction.type.icon,
+            width: 26,
+            height: 26,
           ),
         ),
         title: Text(interaction.type.displayName),
@@ -92,16 +93,6 @@ class _InteractionTile extends StatelessWidget {
     );
   }
   
-  IconData _getTypeIcon(InteractionType type) {
-    switch (type) {
-      case InteractionType.quickText:
-        return Icons.chat_bubble;
-      case InteractionType.phoneCall:
-        return Icons.phone;
-      case InteractionType.meetup:
-        return Icons.people;
-    }
-  }
   
   Color _getTypeColor(InteractionType type) {
     switch (type) {
