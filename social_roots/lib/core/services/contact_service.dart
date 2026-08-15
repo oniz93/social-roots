@@ -15,7 +15,9 @@ class ContactService {
   final Map<String, Contact> _manualContacts = {};
 
   void addManualContact(Contact contact) {
-    _manualContacts[contact.id] = contact;
+    final id = contact.id;
+    if (id == null) return;
+    _manualContacts[id] = contact;
   }
 
   /// Check current permission status
@@ -56,10 +58,11 @@ class ContactService {
       throw ContactPermissionException('Contact permission not granted');
     }
 
-    return await FlutterContacts.getContacts(
-      withProperties: true,
-      withPhoto: true,
-      withThumbnail: true,
+    return await FlutterContacts.getAll(
+      properties: {
+        ...ContactProperties.allProperties,
+        ContactProperty.photoThumbnail,
+      },
     );
   }
 
@@ -69,7 +72,7 @@ class ContactService {
     final lowerQuery = query.toLowerCase();
 
     return allContacts.where((contact) {
-      final name = contact.displayName.toLowerCase();
+      final name = (contact.displayName ?? '').toLowerCase();
       return name.contains(lowerQuery);
     }).toList();
   }
@@ -81,10 +84,12 @@ class ContactService {
     }
 
     try {
-      return await FlutterContacts.getContact(
+      return await FlutterContacts.get(
         id,
-        withProperties: true,
-        withPhoto: true,
+        properties: {
+          ...ContactProperties.allProperties,
+          ContactProperty.photoThumbnail,
+        },
       );
     } catch (e) {
       return null;
@@ -97,7 +102,7 @@ class ContactService {
 
     // Prefer mobile numbers
     final mobile = contact.phones.firstWhere(
-      (p) => p.label == PhoneLabel.mobile,
+      (p) => p.label.label == PhoneLabel.mobile,
       orElse: () => contact.phones.first,
     );
 
@@ -117,7 +122,9 @@ class ContactService {
     // iOS doesn't expose contact frequency data
     contacts.sort(
       (a, b) =>
-          a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase()),
+          (a.displayName ?? '').toLowerCase().compareTo(
+            (b.displayName ?? '').toLowerCase(),
+          ),
     );
     return contacts;
   }

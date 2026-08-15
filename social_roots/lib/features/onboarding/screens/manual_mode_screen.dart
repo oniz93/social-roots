@@ -261,8 +261,8 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
       final contact = Contact(
         id: mc.id,
         displayName: mc.name,
-        phones: mc.phone != null ? [Phone(mc.phone!)] : [],
-        emails: mc.email != null ? [Email(mc.email!)] : [],
+        phones: mc.phone != null ? [Phone(number: mc.phone!)] : [],
+        emails: mc.email != null ? [Email(address: mc.email!)] : [],
       );
       contactService.addManualContact(contact);
       selectedIds.add(mc.id);

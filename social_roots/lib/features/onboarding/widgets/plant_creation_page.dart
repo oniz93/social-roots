@@ -71,7 +71,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
         // Create the plant
         await plantRepository.createPlant(
           contactId: contactId,
-          displayName: contact.displayName,
+          displayName: contact.displayName ?? 'Unknown',
           plantType: plantType,
           difficultyLevel: difficulty,
         );
