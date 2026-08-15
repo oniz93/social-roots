@@ -27,7 +27,7 @@ dependencies:
   rive: ^0.13.20
   
   # UI/UX
-  audioplayers: ^5.2.1
+  audioplayers: ^6.8.1
   
   # Utilities
   intl: ^0.20.2
