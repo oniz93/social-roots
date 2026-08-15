@@ -100,8 +100,8 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                         }
                       });
                     },
-                    selectedColor: Colors.green.shade100,
-                    checkmarkColor: Colors.green,
+                    selectedColor: Theme.of(context).colorScheme.primaryContainer,
+                    checkmarkColor: Theme.of(context).colorScheme.onPrimaryContainer,
                   );
                 }).toList(),
               ),
@@ -179,7 +179,6 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
                 onPressed: _contentController.text.isNotEmpty ? _save : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
-                  backgroundColor: Colors.green,
                 ),
                 child: Text(isEditing ? 'Save Changes' : 'Add Note'),
               ),
