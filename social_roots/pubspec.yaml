@@ -18,7 +18,6 @@ dependencies:
   
   # State Management
   flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
   
   # Contacts
   flutter_contacts: ^1.1.7+1
@@ -28,9 +27,7 @@ dependencies:
   rive: ^0.12.4
   
   # UI/UX
-  flutter_haptic: ^0.0.3
   audioplayers: ^5.2.1
-  cupertino_icons: ^1.0.8
   
   # Utilities
   intl: ^0.20.2
@@ -43,7 +40,6 @@ dependencies:
   flutter_local_notifications: ^20.0.0
   
   # Deep Linking
-  app_links: ^6.0.0
   shared_preferences: ^2.5.4
   timezone: ^0.10.0
 
@@ -52,11 +48,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   
-  # Code Generation
+  # Code Generation (Isar models)
   isar_generator: ^3.1.0+1
   build_runner: ^2.4.13
-  riverpod_generator: ^2.4.0
-  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true
