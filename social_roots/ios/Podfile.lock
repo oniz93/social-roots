@@ -10,6 +10,8 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - image_picker_ios (0.0.1):
+    - Flutter
   - isar_flutter_libs (1.0.0):
     - Flutter
   - permission_handler_apple (9.3.0):
@@ -31,6 +33,7 @@ DEPENDENCIES:
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_haptic (from `.symlinks/plugins/flutter_haptic/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
@@ -51,6 +54,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_haptic/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   isar_flutter_libs:
     :path: ".symlinks/plugins/isar_flutter_libs/ios"
   permission_handler_apple:
@@ -71,6 +76,7 @@ SPEC CHECKSUMS:
   flutter_contacts: 5383945387e7ca37cf963d4be57c21f2fc15ca9f
   flutter_haptic: e5906550236baf5a38b425ba30509ad777e70caa
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
+  image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   isar_flutter_libs: 9fc2cfb928c539e1b76c481ba5d143d556d94920
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   rive_common: daeaa675f575d0a2ce65a2c90d4838d75327047b
