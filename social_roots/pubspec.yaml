@@ -17,7 +17,7 @@ dependencies:
   path_provider: ^2.1.2
   
   # State Management
-  flutter_riverpod: ^2.6.1
+  flutter_riverpod: ^3.4.2
   
   # Contacts
   flutter_contacts: ^2.3.1
@@ -47,10 +47,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  
-  # Code Generation (Isar models)
-  isar_generator: ^3.1.0+1
-  build_runner: ^2.4.13
+
+  # NOTE: isar_generator + build_runner were removed deliberately.
+  # isar_generator is EOL and pins analyzer <6, which conflicts with
+  # flutter_riverpod 3.x. The generated *.g.dart model files are committed,
+  # so builds don't need the codegen tooling. To regenerate Isar models,
+  # temporarily add back:
+  #   isar_generator: ^3.1.0+1
+  #   build_runner: ^2.4.13
+  # then run: dart run build_runner build --delete-conflicting-outputs
 
 flutter:
   uses-material-design: true
