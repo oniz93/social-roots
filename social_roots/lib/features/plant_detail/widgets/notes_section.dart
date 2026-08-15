@@ -153,7 +153,7 @@ class NoteCard extends StatelessWidget {
                             tag,
                             style: const TextStyle(fontSize: 12),
                           ),
-                          backgroundColor: _getTagColor(tag).withOpacity(0.2),
+                          backgroundColor: _getTagColor(tag).withValues(alpha: 0.2),
                           labelStyle: TextStyle(color: _getTagColor(tag)),
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,

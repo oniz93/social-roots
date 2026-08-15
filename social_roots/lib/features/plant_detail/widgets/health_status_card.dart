@@ -37,7 +37,7 @@ class HealthStatusCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: _getStateColor(state).withOpacity(0.2),
+                    color: _getStateColor(state).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(

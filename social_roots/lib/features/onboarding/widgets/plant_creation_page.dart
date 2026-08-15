@@ -168,7 +168,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 20,
                     ),
                   ],
@@ -237,7 +237,7 @@ class _PlantCreationPageState extends ConsumerState<PlantCreationPage>
                       : '$_createdCount of $_totalCount',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                 ),
 

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,7 +23,7 @@ class AudioService {
     try {
       await _player.play(AssetSource('audio/water_drop.mp3'));
     } catch (e) {
-      print('Error playing audio: $e');
+      debugPrint('Error playing audio: $e');
     }
   }
   
@@ -31,7 +33,7 @@ class AudioService {
     try {
       await _player.play(AssetSource('audio/water_pour.mp3'));
     } catch (e) {
-      print('Error playing audio: $e');
+      debugPrint('Error playing audio: $e');
     }
   }
   
@@ -41,7 +43,7 @@ class AudioService {
     try {
       await _player.play(AssetSource('audio/revival_success.mp3'));
     } catch (e) {
-      print('Error playing audio: $e');
+      debugPrint('Error playing audio: $e');
     }
   }
   
@@ -52,7 +54,7 @@ class AudioService {
       await _player.setReleaseMode(ReleaseMode.loop);
       await _player.play(AssetSource('audio/garden_ambient.mp3'));
     } catch (e) {
-      print('Error playing audio: $e');
+      debugPrint('Error playing audio: $e');
     }
   }
   

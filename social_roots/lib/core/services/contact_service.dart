@@ -24,8 +24,9 @@ class ContactService {
 
     if (status.isGranted) return ContactPermissionStatus.granted;
     if (status.isDenied) return ContactPermissionStatus.denied;
-    if (status.isPermanentlyDenied)
+    if (status.isPermanentlyDenied) {
       return ContactPermissionStatus.permanentlyDenied;
+    }
     if (status.isRestricted) return ContactPermissionStatus.restricted;
     return ContactPermissionStatus.notDetermined;
   }
@@ -36,8 +37,9 @@ class ContactService {
 
     if (status.isGranted) return ContactPermissionStatus.granted;
     if (status.isDenied) return ContactPermissionStatus.denied;
-    if (status.isPermanentlyDenied)
+    if (status.isPermanentlyDenied) {
       return ContactPermissionStatus.permanentlyDenied;
+    }
     if (status.isRestricted) return ContactPermissionStatus.restricted;
     return ContactPermissionStatus.notDetermined;
   }
