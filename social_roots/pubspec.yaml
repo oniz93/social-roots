@@ -62,7 +62,6 @@ flutter:
   uses-material-design: true
   
   assets:
-    - assets/rive/plants/
     - assets/images/
     - assets/audio/
   
