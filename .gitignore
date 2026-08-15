@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Local review / submission screenshots (not part of the codebase)
+review/
+submission/
+
+# Stray debug scripts
+test_contact.dart
+social_roots/test_contact.dart
+
+# Ad-hoc screenshots
+social_roots/screenshot_app_store_1.png
