@@ -11,3 +11,11 @@ social_roots/test_contact.dart
 
 # Ad-hoc screenshots
 social_roots/screenshot_app_store_1.png
+
+# Secrets / signing material
+.env
+.env.*
+*.keystore
+*.jks
+key.properties
+*.pem
