@@ -80,17 +80,17 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       labelText: 'Name *',
                       labelStyle: const TextStyle(color: Colors.white70),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.05),
+                      fillColor: Colors.white.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                     ),
@@ -109,17 +109,17 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       labelText: 'Phone (optional)',
                       labelStyle: const TextStyle(color: Colors.white70),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.05),
+                      fillColor: Colors.white.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                     ),
@@ -133,17 +133,17 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       labelText: 'Email (optional)',
                       labelStyle: const TextStyle(color: Colors.white70),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.05),
+                      fillColor: Colors.white.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                     ),
@@ -182,7 +182,7 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
                       final contact = manualContacts[index];
                       return ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Colors.green.withOpacity(0.2),
+                          backgroundColor: Colors.green.withValues(alpha: 0.2),
                           child: Text(
                             contact.name.isNotEmpty
                                 ? contact.name[0].toUpperCase()

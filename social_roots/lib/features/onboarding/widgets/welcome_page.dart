@@ -162,12 +162,12 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.green.shade900.withOpacity(0.3),
+                                  color: Colors.green.shade900.withValues(alpha: 0.3),
                                   blurRadius: 30,
                                   offset: const Offset(0, 15),
                                 ),
                                 BoxShadow(
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                   blurRadius: 20,
                                   offset: const Offset(0, -5),
                                 ),
@@ -244,7 +244,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
                           'Nurture your relationships',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.white.withOpacity(0.95),
+                            color: Colors.white.withValues(alpha: 0.95),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -253,7 +253,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
                           'like a garden',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -300,7 +300,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
                         borderRadius: BorderRadius.circular(30),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.green.shade900.withOpacity(0.4),
+                            color: Colors.green.shade900.withValues(alpha: 0.4),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -357,18 +357,18 @@ class _WelcomePageState extends ConsumerState<WelcomePage>
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withValues(alpha: 0.15),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
           ),
-          child: Icon(icon, color: Colors.white.withOpacity(0.9), size: 24),
+          child: Icon(icon, color: Colors.white.withValues(alpha: 0.9), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
           label,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.white.withValues(alpha: 0.8),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -412,7 +412,7 @@ class FloatingLeavesPainter extends CustomPainter {
       canvas.rotate(leaf.rotation);
 
       final paint = Paint()
-        ..color = leaf.color.withOpacity(0.5)
+        ..color = leaf.color.withValues(alpha: 0.5)
         ..style = PaintingStyle.fill;
 
       // Draw leaf shape
@@ -436,7 +436,7 @@ class FloatingLeavesPainter extends CustomPainter {
 
       // Leaf vein
       final veinPaint = Paint()
-        ..color = leaf.color.withOpacity(0.3)
+        ..color = leaf.color.withValues(alpha: 0.3)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.5;
 
@@ -462,7 +462,7 @@ class BackgroundCirclesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final circlePaint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..style = PaintingStyle.fill;
 
     // Large decorative circles
@@ -485,7 +485,7 @@ class BackgroundCirclesPainter extends CustomPainter {
 
     // Concentric rings at the top
     final ringPaint = Paint()
-      ..color = Colors.white.withOpacity(0.03)
+      ..color = Colors.white.withValues(alpha: 0.03)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
@@ -684,7 +684,7 @@ class LogoPlantPainter extends CustomPainter {
       const Offset(0, -2),
       Offset(0, -size * 0.8),
       Paint()
-        ..color = Colors.green.shade800.withOpacity(0.5)
+        ..color = Colors.green.shade800.withValues(alpha: 0.5)
         ..strokeWidth = 1
         ..strokeCap = StrokeCap.round,
     );

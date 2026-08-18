@@ -271,7 +271,7 @@ class EnhancedPlantPainter extends CustomPainter {
       canvas.rotate(petal.rotation);
 
       final paint = Paint()
-        ..color = petalColor.withOpacity(0.7)
+        ..color = petalColor.withValues(alpha: 0.7)
         ..style = PaintingStyle.fill;
 
       // Draw teardrop-shaped petal
@@ -288,7 +288,7 @@ class EnhancedPlantPainter extends CustomPainter {
   void _drawSparkles(Canvas canvas, Size size) {
     for (final sparkle in sparkles) {
       final paint = Paint()
-        ..color = Colors.yellow.shade200.withOpacity(sparkle.opacity * 0.8)
+        ..color = Colors.yellow.shade200.withValues(alpha: sparkle.opacity * 0.8)
         ..style = PaintingStyle.fill;
 
       final x = sparkle.x * size.width;
@@ -341,7 +341,7 @@ class EnhancedPlantPainter extends CustomPainter {
   ) {
     // Shadow
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
+      ..color = Colors.black.withValues(alpha: 0.2)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
 
     canvas.drawOval(
@@ -419,7 +419,7 @@ class EnhancedPlantPainter extends CustomPainter {
     // Soil texture dots
     if (health > 50) {
       final texturePaint = Paint()
-        ..color = Colors.brown.shade900.withOpacity(0.3)
+        ..color = Colors.brown.shade900.withValues(alpha: 0.3)
         ..style = PaintingStyle.fill;
 
       for (int i = 0; i < 5; i++) {
@@ -505,7 +505,7 @@ class EnhancedPlantPainter extends CustomPainter {
 
     // Draw ridges
     final ridgePaint = Paint()
-      ..color = Colors.green.shade800.withOpacity(0.3)
+      ..color = Colors.green.shade800.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
@@ -649,9 +649,9 @@ class EnhancedPlantPainter extends CustomPainter {
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [
-        _leafColor.withGreen((_leafColor.green * 0.8).toInt()),
+        _leafColor.withGreen(((_leafColor.g * 255).round() * 0.8).toInt()),
         _leafColor,
-        _leafColor.withGreen((_leafColor.green * 0.8).toInt()),
+        _leafColor.withGreen(((_leafColor.g * 255).round() * 0.8).toInt()),
       ],
     );
 
@@ -666,7 +666,7 @@ class EnhancedPlantPainter extends CustomPainter {
     // Yellow edge bands (characteristic of snake plant)
     if (health >= 40) {
       final edgePaint = Paint()
-        ..color = Colors.yellow.shade200.withOpacity(0.6)
+        ..color = Colors.yellow.shade200.withValues(alpha: 0.6)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 
@@ -676,7 +676,7 @@ class EnhancedPlantPainter extends CustomPainter {
     // Horizontal pattern bands
     if (health >= 50) {
       final bandPaint = Paint()
-        ..color = Colors.green.shade900.withOpacity(0.2)
+        ..color = Colors.green.shade900.withValues(alpha: 0.2)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 
@@ -729,7 +729,7 @@ class EnhancedPlantPainter extends CustomPainter {
       4,
       Paint()
         ..color = succulentColor.withGreen(
-          (succulentColor.green * 1.2).toInt().clamp(0, 255),
+          ((succulentColor.g * 255).round() * 1.2).toInt().clamp(0, 255),
         ),
     );
   }
@@ -756,7 +756,7 @@ class EnhancedPlantPainter extends CustomPainter {
     final gradient = LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
-      colors: [color.withOpacity(0.8), color, color.withOpacity(0.8)],
+      colors: [color.withValues(alpha: 0.8), color, color.withValues(alpha: 0.8)],
     );
 
     canvas.drawPath(
@@ -771,7 +771,7 @@ class EnhancedPlantPainter extends CustomPainter {
     canvas.drawPath(
       path,
       Paint()
-        ..color = Colors.white.withOpacity(0.2)
+        ..color = Colors.white.withValues(alpha: 0.2)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );
@@ -864,7 +864,7 @@ class EnhancedPlantPainter extends CustomPainter {
       radius: 1.2,
       colors: [
         _leafColor,
-        _leafColor.withGreen((_leafColor.green * 0.8).toInt()),
+        _leafColor.withGreen(((_leafColor.g * 255).round() * 0.8).toInt()),
       ],
     );
 
@@ -879,7 +879,7 @@ class EnhancedPlantPainter extends CustomPainter {
     // Characteristic holes (fenestrations) for healthy plants
     if (health >= 50) {
       final holePaint = Paint()
-        ..color = Colors.green.shade900.withOpacity(0.3)
+        ..color = Colors.green.shade900.withValues(alpha: 0.3)
         ..style = PaintingStyle.fill;
 
       // Left holes
@@ -905,7 +905,7 @@ class EnhancedPlantPainter extends CustomPainter {
 
     // Center vein
     final veinPaint = Paint()
-      ..color = Colors.green.shade800.withOpacity(0.4)
+      ..color = Colors.green.shade800.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
@@ -1010,7 +1010,7 @@ class EnhancedPlantPainter extends CustomPainter {
       canvas.drawPath(
         petalPath,
         Paint()
-          ..color = Colors.yellow.shade300.withOpacity(0.5)
+          ..color = Colors.yellow.shade300.withValues(alpha: 0.5)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1,
       );
@@ -1135,7 +1135,7 @@ class EnhancedPlantPainter extends CustomPainter {
       radius: 1,
       colors: [
         _leafColor,
-        _leafColor.withGreen((_leafColor.green * 0.85).toInt()),
+        _leafColor.withGreen(((_leafColor.g * 255).round() * 0.85).toInt()),
       ],
     );
 
@@ -1150,7 +1150,7 @@ class EnhancedPlantPainter extends CustomPainter {
     // Variegation pattern for healthy plants
     if (health >= 60) {
       final variegationPaint = Paint()
-        ..color = Colors.yellow.shade100.withOpacity(0.4)
+        ..color = Colors.yellow.shade100.withValues(alpha: 0.4)
         ..style = PaintingStyle.fill;
 
       final varPath = Path();
@@ -1228,7 +1228,7 @@ class EnhancedPlantPainter extends CustomPainter {
       petalPath.quadraticBezierTo(-size * 0.3, -size * 0.4, 0, -size);
       petalPath.quadraticBezierTo(size * 0.3, -size * 0.4, 0, 0);
 
-      canvas.drawPath(petalPath, Paint()..color = petalColor.withOpacity(0.7));
+      canvas.drawPath(petalPath, Paint()..color = petalColor.withValues(alpha: 0.7));
       canvas.restore();
     }
 
@@ -1301,7 +1301,7 @@ class EnhancedPlantPainter extends CustomPainter {
       end: Alignment.bottomCenter,
       colors: [
         _leafColor,
-        _leafColor.withGreen((_leafColor.green * 1.1).toInt().clamp(0, 255)),
+        _leafColor.withGreen(((_leafColor.g * 255).round() * 1.1).toInt().clamp(0, 255)),
       ],
     );
 
@@ -1495,7 +1495,7 @@ class EnhancedPlantPainter extends CustomPainter {
 
       // Serrated edges
       final edgePaint = Paint()
-        ..color = _leafColor.withGreen((_leafColor.green * 0.8).toInt())
+        ..color = _leafColor.withGreen(((_leafColor.g * 255).round() * 0.8).toInt())
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.5;
 
@@ -1554,7 +1554,7 @@ class EnhancedPlantPainter extends CustomPainter {
         canvas.drawPath(
           petalPath,
           Paint()
-            ..color = Colors.white.withOpacity(0.1 * (1 - layer / 3))
+            ..color = Colors.white.withValues(alpha: 0.1 * (1 - layer / 3))
             ..style = PaintingStyle.stroke
             ..strokeWidth = 0.5,
         );

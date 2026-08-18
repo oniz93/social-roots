@@ -25,7 +25,7 @@ class GardenScreen extends ConsumerWidget {
           gardenHealth.when(
             data: (health) => WeatherBackground(healthPercentage: health),
             loading: () => const WeatherBackground(healthPercentage: 100),
-            error: (_, __) => const WeatherBackground(healthPercentage: 50),
+            error: (_, _) => const WeatherBackground(healthPercentage: 50),
           ),
 
           // Main content

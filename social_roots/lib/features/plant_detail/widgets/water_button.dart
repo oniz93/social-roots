@@ -216,7 +216,7 @@ class _WaterOption extends StatelessWidget {
                 vertical: 6,
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.2),
+                color: Colors.green.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

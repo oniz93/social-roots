@@ -200,25 +200,25 @@ class _AddNoteSheetState extends ConsumerState<AddNoteSheet> {
       lastDate: now.add(const Duration(days: 365)),
     );
 
-    if (picked != null && mounted) {
-      final time = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(
-          _reminderDate ?? DateTime.now().add(const Duration(hours: 1)),
-        ),
-      );
+    if (picked == null) return;
+    if (!context.mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(
+        _reminderDate ?? DateTime.now().add(const Duration(hours: 1)),
+      ),
+    );
 
-      if (time != null && mounted) {
-        setState(() {
-          _reminderDate = DateTime(
-            picked.year,
-            picked.month,
-            picked.day,
-            time.hour,
-            time.minute,
-          );
-        });
-      }
+    if (time != null && context.mounted) {
+      setState(() {
+        _reminderDate = DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          time.hour,
+          time.minute,
+        );
+      });
     }
   }
 

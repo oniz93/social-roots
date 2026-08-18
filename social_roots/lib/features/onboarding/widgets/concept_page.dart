@@ -74,7 +74,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.15),
+                            color: Colors.green.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -120,7 +120,7 @@ class _ConceptPageState extends ConsumerState<ConceptPage> {
                   decoration: BoxDecoration(
                     color: _currentPage == index 
                         ? Colors.green 
-                        : Colors.white.withOpacity(0.2),
+                        : Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 );

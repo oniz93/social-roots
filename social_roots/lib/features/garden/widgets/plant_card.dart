@@ -82,13 +82,13 @@ class _PlantCardState extends State<PlantCard>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: _getStateColor(plant.healthState).withOpacity(0.2),
+                  color: _getStateColor(plant.healthState).withValues(alpha: 0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                   spreadRadius: 1,
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -115,7 +115,7 @@ class _PlantCardState extends State<PlantCard>
                   Positioned.fill(
                     child: CustomPaint(
                       painter: CardPatternPainter(
-                        color: Colors.white.withOpacity(0.05),
+                        color: Colors.white.withValues(alpha: 0.05),
                       ),
                     ),
                   ),
@@ -193,7 +193,7 @@ class _PlantCardState extends State<PlantCard>
                             colors: [
                               _getSoilColor(
                                 plant.currentHealth,
-                              ).withOpacity(0.9),
+                              ).withValues(alpha: 0.9),
                               _getSoilColor(plant.currentHealth),
                             ],
                           ),
@@ -263,7 +263,7 @@ class _PlantCardState extends State<PlantCard>
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.1), color.withOpacity(0.3)],
+          colors: [color.withValues(alpha: 0.1), color.withValues(alpha: 0.3)],
           begin: alignment == Alignment.centerLeft
               ? Alignment.centerRight
               : Alignment.centerLeft,
@@ -314,7 +314,7 @@ class _PlantCardState extends State<PlantCard>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -330,7 +330,7 @@ class _PlantCardState extends State<PlantCard>
               color: color,
               shape: BoxShape.circle,
               boxShadow: [
-                BoxShadow(color: color.withOpacity(0.5), blurRadius: 4),
+                BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 4),
               ],
             ),
           ),
@@ -385,7 +385,7 @@ class _PlantCardState extends State<PlantCard>
           child: Icon(
             Icons.water_drop,
             size: 18,
-            color: Colors.blue.shade400.withOpacity(0.8),
+            color: Colors.blue.shade400.withValues(alpha: 0.8),
           ),
         );
       },
@@ -523,9 +523,9 @@ class ShimmerPainter extends CustomPainter {
           LinearGradient(
             colors: [
               Colors.transparent,
-              Colors.white.withOpacity(0.05),
-              Colors.white.withOpacity(0.15),
-              Colors.white.withOpacity(0.05),
+              Colors.white.withValues(alpha: 0.05),
+              Colors.white.withValues(alpha: 0.15),
+              Colors.white.withValues(alpha: 0.05),
               Colors.transparent,
             ],
             stops: const [0.0, 0.3, 0.5, 0.7, 1.0],

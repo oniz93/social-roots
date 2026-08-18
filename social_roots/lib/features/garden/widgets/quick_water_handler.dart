@@ -28,6 +28,7 @@ class QuickWaterHandler {
     );
 
     // Show confirmation - capture ScaffoldMessenger before async gap
+    if (!context.mounted) return;
     final messenger = ScaffoldMessenger.of(context);
     messenger.showSnackBar(
       SnackBar(
