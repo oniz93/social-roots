@@ -18,9 +18,11 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      // Bounded pumps: continuous animations never settle in tests.
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
-      expect(find.text('Your garden is empty'), findsOneWidget);
+      expect(find.text('Your garden awaits'), findsOneWidget);
       expect(find.text('Plant Your First Seed'), findsOneWidget);
     });
 
@@ -60,7 +62,9 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      // Bounded pumps: continuous animations never settle in tests.
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       expect(find.text('Mom'), findsOneWidget);
       expect(find.text('Best Friend'), findsOneWidget);
