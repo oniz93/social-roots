@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.socialroots.social_roots"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    compileSdk = 37
+    ndkVersion = "29.0.13846066"
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
