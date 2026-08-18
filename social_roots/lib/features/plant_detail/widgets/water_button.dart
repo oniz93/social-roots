@@ -49,7 +49,7 @@ class WaterButton extends ConsumerWidget {
             const SizedBox(height: 24),
             
             _WaterOption(
-              icon: Icons.chat_bubble,
+              iconAsset: InteractionType.quickText.icon,
               title: 'Quick Text',
               subtitle: 'Sent a message, meme, or reaction',
               boost: '+20%',
@@ -59,7 +59,7 @@ class WaterButton extends ConsumerWidget {
             const SizedBox(height: 12),
             
             _WaterOption(
-              icon: Icons.phone,
+              iconAsset: InteractionType.phoneCall.icon,
               title: 'Phone Call',
               subtitle: 'Had a voice or video call',
               boost: '+50%',
@@ -69,7 +69,7 @@ class WaterButton extends ConsumerWidget {
             const SizedBox(height: 12),
             
             _WaterOption(
-              icon: Icons.people,
+              iconAsset: InteractionType.meetup.icon,
               title: 'Hangout',
               subtitle: 'Met up in person',
               boost: '+100%',
@@ -155,7 +155,7 @@ class WaterButton extends ConsumerWidget {
 }
 
 class _WaterOption extends StatelessWidget {
-  final IconData icon;
+  final String iconAsset;
   final String title;
   final String subtitle;
   final String boost;
@@ -163,7 +163,7 @@ class _WaterOption extends StatelessWidget {
   final VoidCallback onTap;
   
   const _WaterOption({
-    required this.icon,
+    required this.iconAsset,
     required this.title,
     required this.subtitle,
     required this.boost,
@@ -185,8 +185,8 @@ class _WaterOption extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: color.withOpacity(0.2),
-              child: Icon(icon, color: color),
+              backgroundColor: color.withValues(alpha: 0.2),
+              child: Image.asset(iconAsset, width: 30, height: 30),
             ),
             const SizedBox(width: 16),
             Expanded(
