@@ -150,7 +150,7 @@ class _EmptyGardenStateState extends ConsumerState<EmptyGardenState>
                 Text(
                   'Plant your first seed to start\nnurturing your relationships',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.white.withOpacity(0.85),
+                    color: Colors.white.withValues(alpha: 0.85),
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
@@ -172,7 +172,7 @@ class _EmptyGardenStateState extends ConsumerState<EmptyGardenState>
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.green.shade400.withOpacity(0.4),
+                          color: Colors.green.shade400.withValues(alpha: 0.4),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -217,14 +217,14 @@ class _EmptyGardenStateState extends ConsumerState<EmptyGardenState>
                     Icon(
                       Icons.lightbulb_outline,
                       size: 16,
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       'Each contact becomes a plant to nurture',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withValues(alpha: 0.6),
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -273,12 +273,12 @@ class FloatingSeedsPainter extends CustomPainter {
 
       // Draw dandelion seed shape
       final stemPaint = Paint()
-        ..color = Colors.white.withOpacity(0.5)
+        ..color = Colors.white.withValues(alpha: 0.5)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.5;
 
       final fluffPaint = Paint()
-        ..color = Colors.white.withOpacity(0.4)
+        ..color = Colors.white.withValues(alpha: 0.4)
         ..style = PaintingStyle.fill;
 
       // Seed body
@@ -288,7 +288,7 @@ class FloatingSeedsPainter extends CustomPainter {
           width: seed.size * 0.4,
           height: seed.size * 0.8,
         ),
-        Paint()..color = Colors.brown.shade300.withOpacity(0.6),
+        Paint()..color = Colors.brown.shade300.withValues(alpha: 0.6),
       );
 
       // Stem
@@ -350,7 +350,7 @@ class EmptyPotPainter extends CustomPainter {
         height: size.height * 0.08,
       ),
       Paint()
-        ..color = Colors.black.withOpacity(0.15)
+        ..color = Colors.black.withValues(alpha: 0.15)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
     );
 
@@ -411,7 +411,7 @@ class EmptyPotPainter extends CustomPainter {
       Offset(centerX - potTopWidth / 2 - 4, potTop + 4),
       Offset(centerX + potTopWidth / 2 + 4, potTop + 4),
       Paint()
-        ..color = Colors.brown.shade300.withOpacity(0.5)
+        ..color = Colors.brown.shade300.withValues(alpha: 0.5)
         ..strokeWidth = 2
         ..strokeCap = StrokeCap.round,
     );
@@ -428,7 +428,7 @@ class EmptyPotPainter extends CustomPainter {
 
     // Soil texture
     final soilDetailPaint = Paint()
-      ..color = Colors.brown.shade900.withOpacity(0.4)
+      ..color = Colors.brown.shade900.withValues(alpha: 0.4)
       ..style = PaintingStyle.fill;
 
     for (int i = 0; i < 6; i++) {
@@ -443,7 +443,7 @@ class EmptyPotPainter extends CustomPainter {
 
     // Tiny sprout
     final sproutPaint = Paint()
-      ..color = Colors.green.shade400.withOpacity(0.7)
+      ..color = Colors.green.shade400.withValues(alpha: 0.7)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
@@ -459,7 +459,7 @@ class EmptyPotPainter extends CustomPainter {
 
     // Tiny leaves
     final leafPaint = Paint()
-      ..color = Colors.green.shade400.withOpacity(0.7)
+      ..color = Colors.green.shade400.withValues(alpha: 0.7)
       ..style = PaintingStyle.fill;
 
     canvas.save();
@@ -509,7 +509,7 @@ class EmptyPotPainter extends CustomPainter {
 
     // Decorative pot pattern (simple lines)
     final patternPaint = Paint()
-      ..color = Colors.brown.shade300.withOpacity(0.3)
+      ..color = Colors.brown.shade300.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
@@ -534,7 +534,7 @@ class EmptyPotPainter extends CustomPainter {
     double opacity,
   ) {
     final paint = Paint()
-      ..color = Colors.yellow.shade200.withOpacity(opacity)
+      ..color = Colors.yellow.shade200.withValues(alpha: opacity)
       ..style = PaintingStyle.fill;
 
     // Four-pointed star

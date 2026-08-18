@@ -181,7 +181,7 @@ class _PlantDetailContentState extends ConsumerState<_PlantDetailContent>
         ) {
           // Refresh if changes were made
           if (result == true) {
-            ref.refresh(plantDetailProvider(plant.id));
+            ref.invalidate(plantDetailProvider(plant.id));
           }
         });
         break;

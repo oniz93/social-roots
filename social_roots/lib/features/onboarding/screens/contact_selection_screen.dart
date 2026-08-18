@@ -3,7 +3,6 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/contact_service.dart';
-import '../../../data/models/plant.dart';
 import '../../../data/repositories/plant_repository.dart';
 import '../providers/onboarding_provider.dart';
 
@@ -24,7 +23,7 @@ class _ContactSelectionScreenState
     extends ConsumerState<ContactSelectionScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  bool _isProcessing = false;
+  final bool _isProcessing = false;
 
   @override
   void dispose() {
@@ -86,14 +85,14 @@ class _ContactSelectionScreenState
                 hintStyle: const TextStyle(color: Colors.white54),
                 prefixIcon: const Icon(Icons.search, color: Colors.white54),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.05),
+                fillColor: Colors.white.withValues(alpha: 0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                  borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
@@ -166,7 +165,7 @@ class _ContactSelectionScreenState
                   },
                   loading: () =>
                       const Center(child: CircularProgressIndicator(color: Colors.green)),
-                  error: (_, __) =>
+                  error: (_, _) =>
                       const Center(child: Text('Error loading garden data', style: TextStyle(color: Colors.red))),
                 );
               },
@@ -268,7 +267,7 @@ class _ContactListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: Colors.green.withOpacity(0.2),
+        backgroundColor: Colors.green.withValues(alpha: 0.2),
         backgroundImage: contact.thumbnail != null
             ? MemoryImage(contact.thumbnail!)
             : null,

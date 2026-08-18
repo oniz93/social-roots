@@ -183,20 +183,20 @@ class _WeatherBackgroundState extends State<WeatherBackground>
               gradient: RadialGradient(
                 colors: [
                   Colors.yellow.shade200,
-                  Colors.yellow.shade300.withOpacity(0.5),
-                  Colors.orange.shade200.withOpacity(0.2),
+                  Colors.yellow.shade300.withValues(alpha: 0.5),
+                  Colors.orange.shade200.withValues(alpha: 0.2),
                   Colors.transparent,
                 ],
                 stops: const [0.4, 0.6, 0.8, 1.0],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.yellow.shade300.withOpacity(0.6),
+                  color: Colors.yellow.shade300.withValues(alpha: 0.6),
                   blurRadius: 40,
                   spreadRadius: 15,
                 ),
                 BoxShadow(
-                  color: Colors.orange.shade200.withOpacity(0.3),
+                  color: Colors.orange.shade200.withValues(alpha: 0.3),
                   blurRadius: 60,
                   spreadRadius: 25,
                 ),
@@ -312,7 +312,7 @@ class BirdPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black.withOpacity(0.6)
+      ..color = Colors.black.withValues(alpha: 0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
@@ -339,7 +339,7 @@ class SunRaysPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final paint = Paint()
-      ..color = Colors.yellow.shade300.withOpacity(0.4)
+      ..color = Colors.yellow.shade300.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
@@ -473,7 +473,7 @@ class AnimatedRainPainter extends CustomPainter {
       final x = baseX - (y * 0.1);
 
       final paint = Paint()
-        ..color = Colors.white.withOpacity(opacity)
+        ..color = Colors.white.withValues(alpha: opacity)
         ..strokeWidth = 1.5
         ..strokeCap = StrokeCap.round;
 
@@ -502,7 +502,7 @@ class GrassPainter extends CustomPainter {
     )!;
 
     final paint = Paint()
-      ..color = grassColor.withOpacity(0.3)
+      ..color = grassColor.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -527,7 +527,7 @@ class GrassPainter extends CustomPainter {
     // Draw grass blades for healthy gardens
     if (health > 60) {
       final bladePaint = Paint()
-        ..color = grassColor.withOpacity(0.4)
+        ..color = grassColor.withValues(alpha: 0.4)
         ..strokeWidth = 2
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke;

@@ -94,7 +94,7 @@ class _QuizQuestion extends ConsumerWidget {
                     // Progress indicator
                     LinearProgressIndicator(
                       value: questionNumber / totalQuestions,
-                      backgroundColor: Colors.white.withOpacity(0.1),
+                      backgroundColor: Colors.white.withValues(alpha: 0.1),
                       valueColor: const AlwaysStoppedAnimation(Colors.green),
                     ),
 
@@ -148,7 +148,7 @@ class _QuizQuestion extends ConsumerWidget {
                       title: 'Every few days',
                       subtitle: 'High maintenance plant',
                       plants: 'Orchid, Fern',
-                      color: Colors.red.withOpacity(0.15),
+                      color: Colors.red.withValues(alpha: 0.15),
                       icon: Icons.local_florist,
                       iconColor: Colors.red.shade300,
                       onTap: () => _selectDifficulty(ref, 3),
@@ -160,7 +160,7 @@ class _QuizQuestion extends ConsumerWidget {
                       title: 'Weekly',
                       subtitle: 'Medium maintenance plant',
                       plants: 'Monstera, Sunflower',
-                      color: Colors.orange.withOpacity(0.15),
+                      color: Colors.orange.withValues(alpha: 0.15),
                       icon: Icons.eco,
                       iconColor: Colors.orange.shade300,
                       onTap: () => _selectDifficulty(ref, 2),
@@ -172,7 +172,7 @@ class _QuizQuestion extends ConsumerWidget {
                       title: 'Monthly or less',
                       subtitle: 'Low maintenance plant',
                       plants: 'Cactus, Snake Plant',
-                      color: Colors.green.withOpacity(0.15),
+                      color: Colors.green.withValues(alpha: 0.15),
                       icon: Icons.grass,
                       iconColor: Colors.green.shade300,
                       onTap: () => _selectDifficulty(ref, 1),
@@ -225,7 +225,7 @@ class _FrequencyOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Row(
           children: [

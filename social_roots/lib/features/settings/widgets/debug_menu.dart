@@ -57,7 +57,7 @@ class _DebugMenuState extends ConsumerState<DebugMenu> {
         ),
         if (_isExpanded) ...[
           Container(
-            color: Colors.orange.withOpacity(0.05),
+            color: Colors.orange.withValues(alpha: 0.05),
             child: Column(
               children: [
                 const Padding(

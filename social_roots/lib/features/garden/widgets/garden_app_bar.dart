@@ -36,7 +36,7 @@ class GardenAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
           ),
           loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
         ),
 
         // Settings
@@ -46,10 +46,6 @@ class GardenAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ),
       ],
     );
-  }
-
-  void _showStats(BuildContext context, GardenStats stats) {
-    // Deprecated: Navigating to full screen instead
   }
 }
 
