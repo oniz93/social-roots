@@ -111,10 +111,10 @@ class _QuizQuestion extends ConsumerWidget {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.green.shade800,
-                      backgroundImage: contact?.thumbnail != null
-                          ? MemoryImage(contact!.thumbnail!)
+                      backgroundImage: contact?.photo?.thumbnail != null
+                          ? MemoryImage(contact!.photo!.thumbnail!)
                           : null,
-                      child: contact?.thumbnail == null
+                      child: contact?.photo?.thumbnail == null
                           ? Text(
                               displayName[0].toUpperCase(),
                               style: const TextStyle(fontSize: 36, color: Colors.white),

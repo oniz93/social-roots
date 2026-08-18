@@ -128,10 +128,10 @@ class _AddPlantScreenState extends ConsumerState<AddPlantScreen> {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: _selectedContact?.thumbnail != null
-                      ? MemoryImage(_selectedContact!.thumbnail!)
+                  backgroundImage: _selectedContact?.photo?.thumbnail != null
+                      ? MemoryImage(_selectedContact!.photo!.thumbnail!)
                       : null,
-                  child: _selectedContact?.thumbnail == null
+                  child: _selectedContact?.photo?.thumbnail == null
                       ? const Icon(Icons.person)
                       : null,
                 ),
@@ -189,18 +189,18 @@ class _AddPlantScreenState extends ConsumerState<AddPlantScreen> {
                     final contact = contacts[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: contact.thumbnail != null
-                            ? MemoryImage(contact.thumbnail!)
+                        backgroundImage: contact.photo?.thumbnail != null
+                            ? MemoryImage(contact.photo!.thumbnail!)
                             : null,
-                        child: contact.thumbnail == null
-                            ? Text(contact.displayName[0])
+                        child: contact.photo?.thumbnail == null
+                            ? Text((contact.displayName ?? '?')[0])
                             : null,
                       ),
-                      title: Text(contact.displayName),
+                      title: Text(contact.displayName ?? ''),
                       onTap: () {
                         setState(() {
                           _selectedContact = contact;
-                          _nameController.text = contact.displayName;
+                          _nameController.text = contact.displayName ?? '';
                         });
                         Navigator.pop(context);
                       },
@@ -299,7 +299,7 @@ class _AddPlantScreenState extends ConsumerState<AddPlantScreen> {
       );
     } else {
       await repository.createPlant(
-        contactId: _selectedContact!.id,
+        contactId: _selectedContact!.id ?? '',
         displayName: _nameController.text,
         plantType: _selectedPlantType,
         difficultyLevel: _selectedDifficulty,

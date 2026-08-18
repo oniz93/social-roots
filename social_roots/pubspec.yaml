@@ -17,46 +17,45 @@ dependencies:
   path_provider: ^2.1.2
   
   # State Management
-  flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
+  flutter_riverpod: ^3.4.2
   
   # Contacts
-  flutter_contacts: ^1.1.7+1
-  permission_handler: ^12.0.1
+  flutter_contacts: ^2.3.1
+  permission_handler: ^13.0.1
   
   # Animation
-  rive: ^0.12.4
+  rive: ^0.13.20
   
   # UI/UX
-  flutter_haptic: ^0.0.3
-  audioplayers: ^5.2.1
-  cupertino_icons: ^1.0.8
+  audioplayers: ^6.8.1
   
   # Utilities
   intl: ^0.20.2
   uuid: ^4.2.2
   url_launcher: ^6.2.2
-  share_plus: ^12.0.1
+  share_plus: ^13.3.0
   image_picker: ^1.0.7
   
   # Local Notifications
-  flutter_local_notifications: ^20.0.0
+  flutter_local_notifications: ^22.3.0
   
   # Deep Linking
-  app_links: ^6.0.0
   shared_preferences: ^2.5.4
-  timezone: ^0.10.0
+  timezone: ^0.11.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  
-  # Code Generation
-  isar_generator: ^3.1.0+1
-  build_runner: ^2.4.13
-  riverpod_generator: ^2.4.0
-  json_serializable: ^6.8.0
+
+  # NOTE: isar_generator + build_runner were removed deliberately.
+  # isar_generator is EOL and pins analyzer <6, which conflicts with
+  # flutter_riverpod 3.x. The generated *.g.dart model files are committed,
+  # so builds don't need the codegen tooling. To regenerate Isar models,
+  # temporarily add back:
+  #   isar_generator: ^3.1.0+1
+  #   build_runner: ^2.4.13
+  # then run: dart run build_runner build --delete-conflicting-outputs
 
 flutter:
   uses-material-design: true

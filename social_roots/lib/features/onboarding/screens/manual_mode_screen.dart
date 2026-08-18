@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/services/contact_service.dart';
@@ -261,8 +262,8 @@ class _ManualModeScreenState extends ConsumerState<ManualModeScreen> {
       final contact = Contact(
         id: mc.id,
         displayName: mc.name,
-        phones: mc.phone != null ? [Phone(mc.phone!)] : [],
-        emails: mc.email != null ? [Email(mc.email!)] : [],
+        phones: mc.phone != null ? [Phone(number: mc.phone!)] : [],
+        emails: mc.email != null ? [Email(address: mc.email!)] : [],
       );
       contactService.addManualContact(contact);
       selectedIds.add(mc.id);

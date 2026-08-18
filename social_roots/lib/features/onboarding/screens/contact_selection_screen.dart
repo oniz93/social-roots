@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../core/services/contact_service.dart';
 import '../../../data/repositories/plant_repository.dart';
@@ -216,11 +217,12 @@ class _ContactSelectionScreenState
 
     final query = _searchQuery.toLowerCase();
     return filtered
-        .where((c) => c.displayName.toLowerCase().contains(query))
+        .where((c) => (c.displayName ?? '').toLowerCase().contains(query))
         .toList();
   }
 
-  void _toggleContact(String contactId) {
+  void _toggleContact(String? contactId) {
+    if (contactId == null) return;
     final notifier = ref.read(selectedContactsProvider.notifier);
     final current = ref.read(selectedContactsProvider);
 
@@ -268,19 +270,22 @@ class _ContactListItem extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Colors.green.withValues(alpha: 0.2),
-        backgroundImage: contact.thumbnail != null
-            ? MemoryImage(contact.thumbnail!)
+        backgroundImage: contact.photo?.thumbnail != null
+            ? MemoryImage(contact.photo!.thumbnail!)
             : null,
-        child: contact.thumbnail == null
+        child: contact.photo?.thumbnail == null
             ? Text(
-                contact.displayName.isNotEmpty
-                    ? contact.displayName[0].toUpperCase()
+                (contact.displayName ?? '').isNotEmpty
+                    ? contact.displayName![0].toUpperCase()
                     : '?',
                 style: const TextStyle(color: Colors.green),
               )
             : null,
       ),
-      title: Text(contact.displayName, style: const TextStyle(color: Colors.white)),
+      title: Text(
+        contact.displayName ?? '',
+        style: const TextStyle(color: Colors.white),
+      ),
       subtitle: contact.phones.isNotEmpty
           ? Text(contact.phones.first.number, style: const TextStyle(color: Colors.white54))
           : null,
