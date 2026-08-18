@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Roots — Grow Your Relationships</title>
+  <meta name="description" content="Social Roots is a personal CRM that turns your relationships into a digital garden. Water your plants, nurture your connections.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --green-dark: #2d6a4f;
+      --green-mid: #40916c;
+      --green-light: #95d5b2;
+      --green-pale: #d8f3dc;
+      --bg: #fafdf7;
+      --text: #1b1b1b;
+      --text-muted: #555;
+      --radius: 12px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+    }
+    nav .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-decoration: none;
+    }
+    nav .links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav .links a:hover { color: var(--green-dark); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .hero .icon { font-size: 4rem; margin-bottom: 1rem; }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--green-dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 2rem;
+    }
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--green-dark);
+      color: #fff;
+      padding: 0.75rem 1.75rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .badge:hover { background: var(--green-mid); }
+
+    /* FEATURES */
+    .features {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--green-pale);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+    .card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--green-dark);
+    }
+    .card p { font-size: 0.95rem; color: var(--text-muted); }
+
+    /* HOW IT WORKS */
+    .how {
+      background: var(--green-pale);
+      padding: 4rem 1.5rem;
+    }
+    .how-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .how h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--green-dark);
+      margin-bottom: 2rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      text-align: center;
+    }
+    .step .num {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 50%;
+      background: var(--green-dark);
+      color: #fff;
+      font-weight: 700;
+      margin: 0 auto 0.75rem;
+    }
+    .step h4 { font-weight: 700; margin-bottom: 0.35rem; }
+    .step p { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--green-mid); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">Social Roots</a>
+    <div class="links">
+      <a href="/support">Support</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="icon">🌱</div>
+    <h1>Grow Your Relationships Like a Garden</h1>
+    <p>
+      Social Roots is a personal CRM that turns your contacts into a living digital garden.
+      Each relationship is a plant — water it regularly, and watch it thrive. Neglect it, and it wilts.
+    </p>
+    <div class="badge-row">
+      <a href="#features" class="badge">See How It Works</a>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="card">
+      <div class="icon">🌿</div>
+      <h3>Your Contacts, Reimagined</h3>
+      <p>Import contacts from your phone or add them manually. Each person becomes a unique plant in your garden, reflecting how strong your connection is.</p>
+    </div>
+    <div class="card">
+      <div class="icon">💧</div>
+      <h3>Water to Stay Connected</h3>
+      <p>"Watering" a plant means you reached out — a call, a text, coffee. Log interactions in one tap and keep your relationships healthy.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>Health at a Glance</h3>
+      <p>See which relationships need attention. Plants change appearance based on how recently you've connected, so you never lose touch with the people who matter.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔔</div>
+      <h3>Gentle Reminders</h3>
+      <p>Get notified before a plant starts wilting. Customisable reminder frequencies let you set the pace that feels right for each relationship.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📝</div>
+      <h3>Notes &amp; Context</h3>
+      <p>Jot down important details about each person — birthdays, preferences, conversation topics — so every interaction feels personal.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🏖️</div>
+      <h3>Vacation Mode</h3>
+      <p>Going offline? Pause the clock on all your plants so they stay healthy while you recharge. Pick up right where you left off.</p>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="how-inner">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h4>Add Your People</h4>
+          <p>Import contacts or create them manually.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h4>Assign Plant Types</h4>
+          <p>Choose a plant that matches each relationship.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h4>Water Regularly</h4>
+          <p>Log interactions with a single tap.</p>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <h4>Watch It Grow</h4>
+          <p>See your garden flourish as you stay connected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Social Roots.
+    <a href="/support">Support</a> &middot;
+    <a href="/privacy">Privacy Policy</a>
+  </footer>
+
+</body>
+</html>

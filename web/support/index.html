@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — Social Roots</title>
+  <meta name="description" content="Need help with Social Roots? Get in touch with our support team.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --green-dark: #2d6a4f;
+      --green-mid: #40916c;
+      --green-light: #95d5b2;
+      --green-pale: #d8f3dc;
+      --bg: #fafdf7;
+      --text: #1b1b1b;
+      --text-muted: #555;
+      --radius: 12px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+    }
+    nav .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-decoration: none;
+    }
+    nav .links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav .links a:hover { color: var(--green-dark); }
+
+    /* CONTENT */
+    .page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .page h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--green-dark);
+      margin-bottom: 0.75rem;
+    }
+    .page .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background: #fff;
+      border: 1px solid var(--green-pale);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+    .contact-box h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--green-dark);
+    }
+    .contact-box p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .field {
+      margin-bottom: 1rem;
+    }
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: var(--bg);
+      transition: border-color 0.2s;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--green-mid);
+    }
+    .field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .send-btn {
+      display: inline-block;
+      background: var(--green-dark);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .send-btn:hover { background: var(--green-mid); }
+
+    .alt-contact {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .alt-contact a {
+      color: var(--green-mid);
+      text-decoration: none;
+    }
+    .alt-contact a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--green-mid); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">Social Roots</a>
+    <div class="links">
+      <a href="/support">Support</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </nav>
+
+  <section class="page">
+    <h1>Support</h1>
+    <p class="subtitle">Having trouble or have a question? We're happy to help.</p>
+
+    <div class="contact-box">
+      <h2>Send Us a Message</h2>
+      <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+
+      <form id="support-form">
+        <div class="field">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+        </div>
+        <div class="field">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Describe your issue or question..." required></textarea>
+        </div>
+        <button type="submit" class="send-btn">Send Message</button>
+      </form>
+
+      <p class="alt-contact">
+        You can also email us directly at
+        <a href="mailto:teo.miscia@gmail.com">teo.miscia@gmail.com</a>
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Social Roots.
+    <a href="/">Home</a> &middot;
+    <a href="/privacy">Privacy Policy</a>
+  </footer>
+
+  <script>
+    document.getElementById('support-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+      const subject = encodeURIComponent('Social Roots Support: ' + name);
+      const body = encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message);
+      window.location.href = 'mailto:teo.miscia@gmail.com?subject=' + subject + '&body=' + body;
+    });
+  </script>
+
+</body>
+</html>
